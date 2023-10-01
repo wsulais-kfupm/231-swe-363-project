@@ -1,0 +1,63 @@
+#+title: 231-SWE363 Project
+#+author: Group 14
+
+Shared project monorepo.
+
+* Project Structure
+The project directory structure is split into 3 directories.
+- ~front~ :: for the frontend part of the project
+- ~back~ :: for the backend part of the project
+- ~report~ :: for any reports needed by the project
+
+Please find the respective ~README~​s within each folder for more information.
+
+* Team Members
+|                     |    <c>    |    <c>     |
+| Member              |    ID     |    Work    |
+|---------------------+-----------+------------|
+| Faisal Al-Harthi    | 201950950 |    TBD     |
+| Rayan Al-Amrani     | 202038940 |    TBD     |
+| Abdulmalik Al-Madhi | 202026200 |    TBD     |
+| Wael Sulais         | 202032440 | Full-stack |
+
+* Contribution
+
+All commits should follow conventional commit structure with the scope indicating which part of the project being worked on.
+
+Here are some examples of commit messages. Note the extra scope added when it makes sense.
+#+begin_example
+feat(front): Implement products page
+fix(back): Allow unauthenticated API access
+chore(report/proposal): Elaborate on idea
+#+end_example
+
+Try to keep commit messages less than 50 characters, and in general, follow [[https://www.freecodecamp.org/news/git-best-practices-commits-and-code-reviews/][the 12 git commandments]].
+** Branches
+Try to work within a feature branch when implementing features.
+A good rule of thumb is, if it's more than 2 /atomic/ commits then you should use a branch for it.
+
+Don't forget to make a [[https://www.howtogeek.com/devops/what-are-git-pull-requests-and-how-do-you-use-them/][pull request]] when you're finished to put everything on ~main~.
+
+* License
+
+Unless stated otherwise, All source code is licensed under [[https://www.gnu.org/licenses/agpl-3.0.txt][GNU AGPL v3.0 or later]] and all documents/reports under [[https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1][CC BY-NC-SA 4.0]]
+
+Try to include the following notice in the start of all source code if possible
+
+#+begin_quote
+Price comparison site
+Copyright (C) 2023 231-SWE363-Group14
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#+end_quote
