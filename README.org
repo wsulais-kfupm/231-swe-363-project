@@ -12,12 +12,12 @@ The project directory structure is split into 3 directories.
 Please find the respective ~README~​s within each folder for more information.
 
 * Team Members
-|                     |    <c>    |    <c>     |
-| Member              |    ID     |    Work    |
+| Member              |        ID | Work       |
 |---------------------+-----------+------------|
-| Faisal Al-Harthi    | 201950950 |    TBD     |
-| Rayan Al-Amrani     | 202038940 |    TBD     |
-| Abdulmalik Al-Madhi | 202026200 |    TBD     |
+| Abdulmalik Al-Madhi | 202026200 | Frontend   |
+| Faisal Al-Harthi    | 201950950 | Backend    |
+| Rayan Al-Amrani     | 202038940 | Backend    |
+| Mohammed Al-Zahrani | 201936970 | Full-stack |
 | Wael Sulais         | 202032440 | Full-stack |
 
 * Contribution
