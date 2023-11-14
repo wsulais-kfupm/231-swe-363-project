@@ -77,3 +77,5 @@ INSERT into product_Pricing values('2021/10/31',1,'SAR',12);
 INSERT into Market_Category values('grociries','Othaim');
 
 INSERT into Notified VALUES('123x',1)
+
+CREATE VIEW priceforproduct as SELECT p.price,p.currency,v.product_slug,v.variant_slug from product_Pricing p join Product_Variant v join product_listing l on p.listing_ID=l.listing_ID and l.varid=v.Var_ID 
