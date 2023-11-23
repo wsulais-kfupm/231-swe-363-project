@@ -4,6 +4,8 @@
 // requst all product listings in a market DONE
 // requesst all historical prices of a variant of a product Done
 // goal is to finish then refactor in type script when I'm comfortable
+// insert cookieID and retreive it
+
 //port used will be 3000
 const express= require('express')
 const app= express();
@@ -45,4 +47,24 @@ app.get("/get/marketprices/:productName",(req,res)=>{
     })
 })
 
+app.get("/add/cookie/:id",(req,res)=>{
+    db.run(`INSERT INTO user values(${req.params.id})`,(runres,err)=>{
+        if(err) res.status(404);
+        res.status(200);
+    })
+})
+
+app.get('/add/notification/:cookieID/:varID',(req,res)=>{
+    db.run(`INSERT INTO Notified values(${req.params.cookieID},${req.params.varID})`,(runres,err)=>{
+        if(err) res.status(404);
+        res.status(200);
+    })
+
+})
+app.get("/get/notification/:cookieID",(req,res)=>{
+    db.run(`SELECT Var_ID from Notified where Cookie_ID= ${req.params.cookieID} `,(err,rows)=>{
+        if (err) res.status(404);
+        res.json(rows)
+    })
+})
 app.listen(3000)
