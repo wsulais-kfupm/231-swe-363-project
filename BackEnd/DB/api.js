@@ -3,8 +3,6 @@
 // request all variants of a certian product DONE
 // requst all product listings in a market DONE
 // requesst all historical prices of a variant of a product Done
-// goal is to finish then refactor in type script when I'm comfortable
-// insert cookieID and retreive it
 
 //port used will be 3000
 const express= require('express')
@@ -37,7 +35,7 @@ app.get("/get/marketprices/:productName/:variantName",(req,res)=>{
     })
 })
 // get all prices of a single product
-// TODO redo
+
 app.get("/get/marketprices/:productName",(req,res)=>{
     
     db.all(`SELECT Price,currency,variant_slug from priceforproduct where product_slug=${req.params.productName}`,(err,rows)=>{
