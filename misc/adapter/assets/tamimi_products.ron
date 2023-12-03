@@ -1,0 +1,14 @@
+InputQuery(
+    query: r#"
+    {
+        Products {
+            name  @output
+						brand {
+									name @output(name: "brand_name")
+						}
+        }
+    }
+    "#,
+    args: {
+    },
+)

@@ -1,0 +1,69 @@
+schema {
+    query: TamimiQuery
+}
+directive @filter(
+    """Name of the filter operation to perform."""
+    op: String!
+    """List of string operands for the operator."""
+    value: [String!]
+) repeatable on FIELD | INLINE_FRAGMENT
+directive @tag(
+    """Name to apply to the given property field."""
+    name: String
+) on FIELD
+directive @output(
+    """What to designate the output field generated from this property field."""
+    name: String
+) on FIELD
+directive @optional on FIELD
+directive @recurse(
+    """
+    Recurse up to this many times on this edge. A depth of 1 produces the current
+    vertex and its immediate neighbors along the given edge.
+    """
+    depth: Int!
+) on FIELD
+directive @fold on FIELD
+directive @transform(
+    """
+    Name of the transformation operation to perform.
+    """
+    op: String!
+) on FIELD
+
+
+type TamimiQuery {
+    Categories: [Category!]
+    Products(name: String): [Product!]
+}
+
+type Category {
+  name: String!
+  description: String
+  image: String
+  languages: String!
+  slug: String!
+  subcategories: [Category!]!
+  products: [Product!]
+}
+
+type Product {
+  brand: Brand!
+  name: String!
+  variants: [ProductVariant!]!
+}
+
+type Brand {
+  name: String!
+  image: String
+}
+
+type ProductVariant {
+  images: [String!]!
+  name: String!
+  store: [StoreData!]!
+}
+
+type StoreData {
+  mrp: String!
+}

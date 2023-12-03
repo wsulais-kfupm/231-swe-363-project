@@ -1,0 +1,25 @@
+InputQuery(
+    query: r#"
+    {
+        Categories {
+            name @filter(op: "has_substring", value: ["$name"]) @output
+            subcategories {
+                # subcategories: name @output
+                subcategories @recurse(depth: 5) {
+                    name @output(name: "subcat_name")
+                }
+            }
+
+            products @fold {
+                productName: name
+                brand {
+                    brand: name @output
+                }
+            }
+        }
+    }
+    "#,
+    args: {
+        "name": String(""),
+    },
+)
