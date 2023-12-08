@@ -8,6 +8,17 @@ const client = new Client({
   password: 'SWE363Project.',
   port: 5432,
 })
+const webPush = require("web-push");
+webPush.setVapidDetails(
+    "https://example.com/",
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+  
+// Change VAPID KEYS to be Environment keys later on :)
+process.env['VAPID_PUBLIC_KEY'] = 'BC7i8ymKPvPQIsOQPZHaF6hv6iBzml0kPIw8Tv3lrrxW_d7y04xaqKyrOwJASFiX1ftkfC4HhOb7kjt-kX97COw'
+process.env['VAPID_PRIVATE_KEY']= '-iYjeSDs9kPIaVZ4HWs7Iv1c3dM2x0vW0nejLLostU0'
+
 client.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
@@ -107,18 +118,18 @@ async function pushNotification(subscription){
                     clickUrl : "https://"+data[0].var_id
             };
             console.log(payload)
-    //     setTimeout(function () {
-    //         webPush
-    //         .sendNotification(subscription, JSON.stringify(payload), options)
-    //         .then(function () {
-    //         console.log(JSON.stringify(payload))
-    //         res.sendStatus(201);
-    //       })
-    //       .catch(function (error) {
-    //         res.sendStatus(500);
-    //         console.log(error);
-    //       });
-    //   }, 0 * 1000);
+        setTimeout(function () {
+            webPush
+            .sendNotification(subscription, JSON.stringify(payload), options)
+            .then(function () {
+            console.log(JSON.stringify(payload))
+            res.sendStatus(201);
+          })
+          .catch(function (error) {
+            res.sendStatus(500);
+            console.log(error);
+          });
+      }, 0 * 1000);
             })
         }
     })
