@@ -1,4 +1,4 @@
-const postgres = require("postgres")
+
 
 const { Client } = require('pg')
 const client = new Client({
@@ -51,7 +51,7 @@ async function productVariant(product){
 // get all prices of a single variant
 async function variantPrices(product,variantName){
     return new Promise(function (resolve) {
-        client.query(`SELECT price,currency from product_Pricing where listing_ID in (select listing_ID from product_listing where varid in (select Var_ID from Product_Variant where variant_slug ='${variantName}' AND product_slug="${product}" ));`,(err,res)=>{
+        client.query(`SELECT price,currency from product_Pricing where listing_ID in (select listing_ID from product_listing where varid in (select Var_ID from Product_Variant where variant_slug ='${variantName}' AND product_slug="${product}" order by ));`,(err,res)=>{
             if(err) console.log(err)
             console.log(res)
             resolve(res.rows)
@@ -59,10 +59,10 @@ async function variantPrices(product,variantName){
 
     })
 }
-//insert cookie
-async function addCookie(cookieID){
+
+async function addEndPoint(cookieID){
     return new Promise(function (resolve) {
-        client.query(`INSERT INTO user values(${cookieID})`,(err,res)=>{
+        client.query(`INSERT INTO web values(${cookieID})`,(err,res)=>{
             if(err) console.log(err)
             console.log(res)
             resolve(res.rows)
@@ -82,9 +82,10 @@ async function addNotification(cookieID,variant){
     })
 }
 //get all variants that a single user wants to be notified about 
+
 async function userNotifications(cookieID){
     return new Promise(function (resolve) {
-        client.query(`SELECT Var_ID from Notified where Cookie_ID= ${cookieID} `,(err,res)=>{
+        client.query(`SELECT Var_ID from Notified where Cookie_ID= $1`,[cookieID+''],(err,res)=>{
             if(err) console.log(err)
             console.log(res)
             resolve(res.rows)
@@ -92,11 +93,43 @@ async function userNotifications(cookieID){
 
     })
 }
+//TODO get subscription
+async function pushNotification(subscription){
+    userNotifications(subscription).then((data)=>{
+        for(let i=0;i<data.length;i++){
+            client.query('SELECT price,v.variant_slug from product_Pricing a join product_listing l on a.listing_id=l.listing_id join product_variant v on l.varid = v.var_id where a.listing_ID in (select listing_ID from product_listing where varid = $1) order by price ',[data[i].var_id],(err,res)=>{
+            row=res.rows[0]
+            console.log(row)
+            const payload = {
+                    title : "DEALS ON "+row.variant_slug,
+                    body : "Cheapest Price is "+row.price,
+                    tag : "123",
+                    clickUrl : "https://"+data[0].var_id
+            };
+            console.log(payload)
+    //     setTimeout(function () {
+    //         webPush
+    //         .sendNotification(subscription, JSON.stringify(payload), options)
+    //         .then(function () {
+    //         console.log(JSON.stringify(payload))
+    //         res.sendStatus(201);
+    //       })
+    //       .catch(function (error) {
+    //         res.sendStatus(500);
+    //         console.log(error);
+    //       });
+    //   }, 0 * 1000);
+            })
+        }
+    })
+}
+
 //get all values in table
 module.exports.table=table
 module.exports.priceforproduct=priceforproduct
 module.exports.productVariant=productVariant
 module.exports.variantPrices=variantPrices
-module.exports.addCookie=addCookie
+module.exports.addEndPoint=addEndPoint
 module.exports.addNotification=addNotification
 module.exports.userNotifications=userNotifications
+module.exports.pushNotification=pushNotification
