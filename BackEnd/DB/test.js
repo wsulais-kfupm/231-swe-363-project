@@ -33,10 +33,24 @@
 //  dbcontrol.table('brand').then((date)=> console.log(date))
 const express = require("express");
 const app = express();
+var bodyParser = require('body-parser')
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+app.use(express.static(__dirname));
+
 db=require('./DBcontroller')
-app.get('/:sub',(req,res)=>{
-    db.pushNotification('1231231313').then((data)=>{
-      console.log(data)
-    })
+app.get('/',(req,res)=>{
+    res.sendFile(__dirname+'/test.html')
 })
-app.listen(3000)
+app.post('/insert',(req,res)=>{
+  const subscription = req.body;
+  console.log(subscription)
+  db.addEndPoint(subscription).then(console.log('endpoint added'))
+})
+app.get(`/doit`,(req,res)=>{
+    db.psuhAllNotifications()
+})
+db.psuhAllNotifications()
+app.listen(3001)
