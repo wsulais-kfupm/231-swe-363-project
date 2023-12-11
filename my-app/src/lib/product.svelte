@@ -1,10 +1,12 @@
 <script>
     import { Badge } from 'flowbite-svelte';
-    export let src=""
-    export let brand=""
-    export let product=""
-    export let weights=[""]
+
+    export let pname=""
+    export let bname=""
+    export let img=""
+    export let quantities=[""]
     export let prices=[""]
+    export let marketnames=[""]
 
 
     let current=0
@@ -157,33 +159,32 @@
 
 <div class="product-container">
     <div class="product-img">
-        <img {src} >
+        <img src={img} >
     </div>
     
     <div class="product-info">
-        <p class="brand">{brand}</p>
-        <h1 class="product-name">{product}</h1>
+        <p class="brand">{bname}</p>
+        <h1 class="product-name">{pname}</h1>
         <div class="weights-container">
             <div class="weights">
             <!--Loops through weight  -->
-            {#each weights as weight, i}
+            {#each quantities as weight, i}
             <button 
             class="nav-link {current === i? 'selected' : ''}"
-            on:click={() => current = i}
-            >
+            on:click={() => current = i}>
                 <span class="weight-text">{weight}</span>
             </button>
             {/each}
             </div>
         </div>
         <div class="info">
-            <div class="market"><Badge large color="red">Tamimi</Badge></div>
+            <div class="market"><Badge large color="red">{marketnames[current]}</Badge></div>
             <div class="discount">
                 
                 <span class="price">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" style="display: inline;">
                         <path d="M18.5892 13.6617C18.327 13.4206 17.9715 13.2853 17.6007 13.2853C17.23 13.2853 16.8744 13.4206 16.6122 13.6617L13.4062 16.6096V4.28562C13.4062 3.94465 13.2589 3.61765 12.9967 3.37655C12.7345 3.13545 12.3789 3 12.008 3C11.6372 3 11.2816 3.13545 11.0194 3.37655C10.7572 3.61765 10.6099 3.94465 10.6099 4.28562V16.6096L7.40386 13.6617C7.27488 13.5389 7.1206 13.4409 6.95002 13.3736C6.77944 13.3062 6.59597 13.2707 6.41032 13.2692C6.22467 13.2677 6.04056 13.3003 5.86873 13.3649C5.6969 13.4296 5.54079 13.525 5.40951 13.6457C5.27824 13.7664 5.17442 13.91 5.10412 14.068C5.03382 14.226 4.99844 14.3953 5.00005 14.566C5.00167 14.7367 5.04024 14.9054 5.11351 15.0622C5.18679 15.2191 5.29331 15.3609 5.42685 15.4795L11.0195 20.622C11.1497 20.742 11.3047 20.8368 11.4753 20.901C11.6444 20.9663 11.826 21 12.0094 21C12.1929 21 12.3744 20.9663 12.5435 20.901C12.7142 20.8368 12.8691 20.742 12.9993 20.622L18.592 15.4795C18.8538 15.2381 19.0005 14.911 19 14.5701C18.9995 14.2292 18.8517 13.9024 18.5892 13.6617Z" fill="#0E9F6E"/>
-                    </svg>67.95 SAR</span>
+                    </svg>{prices[current]} SAR</span>
             </div>
             
         </div>
