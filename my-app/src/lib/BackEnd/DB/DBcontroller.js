@@ -242,6 +242,29 @@ function urlBase64ToUint8Array(base64String) {
     function wrap() {
         return new Promise((resolve) => setTimeout(resolve, 150));
     }
+
+    function frontpage(){
+        return new Promise( function (resolve) {
+            client.query(`SELECT * from product limit 10`,async (/** @type {any} */ err,/** @type {{ rows: any; }} */ res)=>{
+                if(err) console.log(err)
+                let rows=res.rows
+                
+                 for( let i=0;i<rows.length;i++){
+                    await wrap()
+                    client.query(`select variant_slug,varid, b.listing_id,c.currency,price,url,quantity,quantity_unit,quantity_pcs,marketname from 
+                    product_variant a join product_listing b on  a.var_id=b.varid join (select listing_id,max(currency) as currency ,min(price) as price from product_pricing group by listing_id ) c on c.listing_id=b.listing_id where a.product_slug=$1`,[rows[i].pname_slug],(err,variant)=>{
+                        
+                        rows[i].variants= variant.rows
+                  
+                    })
+                }
+       
+                    resolve(rows)
+               
+            })
+    
+        })}
+
 //   client.query(`select * from product`,(err,res)=>{
 //     console.log(res.rows)
 // })
@@ -261,4 +284,4 @@ function urlBase64ToUint8Array(base64String) {
 // module.exports.userNotifications=userNotifications
 // module.exports.pushNotification=pushNotification
 // module.exports.psuhAllNotifications=psuhAllNotifications
-export { table, priceforproduct, productVariant,variantPrices,addEndPoint,addNotification,userNotifications,psuhAllNotifications,mainPage};
+export { table, priceforproduct, productVariant,variantPrices,addEndPoint,addNotification,userNotifications,psuhAllNotifications,mainPage,frontpage};
