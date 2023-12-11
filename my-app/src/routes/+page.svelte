@@ -37,15 +37,24 @@
     
 </script>
 
-<div class="category-container">
-	{#await getinfo()}
-		<p>Loading...</p>
-	{:then products}
-		{#each products as product}
-			<Product {...product} />
-		{/each}
-	{/await}
-</div>
+<main class="w-full px-8 flex-col justify-start items-start gap-8 inline-flex">
+	<h1 class="font-sans text-black text-5xl font-semibold font-['Inter'] leading-10">
+		Popular Categories
+	</h1>
+	<section></section>
+	<h1 class="font-sans text-black text-5xl font-semibold font-['Inter'] leading-10">
+		Today's Sales
+	</h1>
+	<section class="w-full justify-start gap-8 items-start inline-flex">
+		{#await getinfo()}
+			<p>Loading...</p>
+		{:then products}
+			{#each products as product}
+				<Product {...product} />
+			{/each}
+		{/await}
+	</section>
+</main>
 
 <style>
 	.body {
