@@ -4,17 +4,25 @@
 	import LangDropdown from './dropdown.svelte';
 	import Setting from './setting.svelte';
 	import Search from './search.svelte';
+
+	export let crumb = false;
+	export let path = [
+		{ href: '/', name: 'Home' },
+		{ href: 'product', name: 'Products' }
+	];
 </script>
 
 <header class="nav-container">
 	<div class="navbar">
 		<div class="text"><span>Supermarkets</span></div>
 		<div class="mid">
-			<Breadcrumb aria-label="Solid background breadcrumb example" solid>
-				<BreadcrumbItem href="/" home>Home</BreadcrumbItem>
-				<BreadcrumbItem href="/">Projects</BreadcrumbItem>
-				<BreadcrumbItem>Flowbite Svelte</BreadcrumbItem>
-			</Breadcrumb>
+			{#if path.length > 1}
+				<Breadcrumb aria-label="Solid background breadcrumb example" solid>
+					{#each path as { href, name }}
+						<BreadcrumbItem {href} home={href === '/'}>{name}</BreadcrumbItem>
+					{/each}
+				</Breadcrumb>
+			{/if}
 		</div>
 		<Search />
 		<LangDropdown />
