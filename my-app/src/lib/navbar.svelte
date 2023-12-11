@@ -1,9 +1,10 @@
 <script>
-    import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Button, Input, DarkMode} from 'flowbite-svelte'
+    import { Navbar, Breadcrumb, BreadcrumbItem, Button, DarkMode} from 'flowbite-svelte'
     import { SearchOutline } from 'flowbite-svelte-icons'
     import LangDropdown from './dropdown.svelte'
     import Setting from './setting.svelte'
     import Search from './search.svelte'
+
 </script>
 
 <style>
@@ -56,7 +57,13 @@
 <header class="nav-container">
   <div class="navbar">
     <div class="text"><span>Supermarkets</span></div>
-    <div class="mid"></div>
+    <div class="mid">
+      <Breadcrumb aria-label="Solid background breadcrumb example" solid>
+        <BreadcrumbItem href="/" home>Home</BreadcrumbItem>
+        <BreadcrumbItem href="/">Projects</BreadcrumbItem>
+        <BreadcrumbItem>Flowbite Svelte</BreadcrumbItem>
+      </Breadcrumb>
+    </div>
     <Search />
     <LangDropdown />
     <Setting />

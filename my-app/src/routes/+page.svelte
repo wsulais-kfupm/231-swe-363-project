@@ -1,6 +1,6 @@
 <script>
-    import Navbar from '$lib/navbar.svelte'
-    import Footer from '$lib/footer.svelte'
+// @ts-nocheck
+
     import Placeholder from '$lib/assets/placeholder.jpeg'
     import Product from '$lib/product.svelte'
     import Category from '$lib/category.svelte'
@@ -19,7 +19,7 @@
         quantity: 100,
         quantity_unit: 'ML',
         quantity_pcs: 1,
-        marketname: 'Othaim'
+        marketname: 'Tamimi'
      },
      {
         varid: 2,
@@ -166,9 +166,10 @@
     ]} 
 ]
 
+// @ts-ignore
 let products=[]
 for (const product of json){
-    products.push(filter(json))
+    products.push(filter(product))
 }
 
 </script>
@@ -194,7 +195,6 @@ for (const product of json){
     }
 </style>
 
-<Navbar />
 <div class="category-container">
     {#each products as product}
         <Product {...product}/>

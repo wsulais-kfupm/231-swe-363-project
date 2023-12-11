@@ -2,13 +2,16 @@
  * @param {{ variants: any; }[]} product
  */
 export function filter(product){
-    let pname=product[0].pname_slug
-    let bname=product[0].bname
-    let img=product[0].img
+    // @ts-ignore
+    let pname=product.pname_slug
+    // @ts-ignore
+    let bname=product.bname
+    // @ts-ignore
+    let img=product.img
     let quantities=[]
     let prices=[]
     let marketnames=[]
-    let variants= product[0].variants
+    let variants= product.variants
     for (const variant of variants){
         quantities.push(String(variant.quantity) + variant.quantity_unit)
         prices.push(variant.price)
