@@ -31,26 +31,26 @@
 // // }
 
 //  dbcontrol.table('brand').then((date)=> console.log(date))
-const express = require("express");
+const express = require('express');
 const app = express();
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
-db=require('./DBcontroller')
-app.get('/',(req,res)=>{
-    res.sendFile(__dirname+'/test.html')
-})
-app.post('/insert',(req,res)=>{
-  const subscription = req.body;
-  console.log(subscription)
-  db.addEndPoint(subscription).then(console.log('endpoint added'))
-})
-app.get(`/doit`,(req,res)=>{
-    db.psuhAllNotifications()
-})
-db.psuhAllNotifications()
-app.listen(3001)
+db = require('./DBcontroller');
+app.get('/', (req, res) => {
+	res.sendFile(__dirname + '/test.html');
+});
+app.post('/insert', (req, res) => {
+	const subscription = req.body;
+	console.log(subscription);
+	db.addEndPoint(subscription).then(console.log('endpoint added'));
+});
+app.get(`/doit`, (req, res) => {
+	db.psuhAllNotifications();
+});
+db.psuhAllNotifications();
+app.listen(3001);
