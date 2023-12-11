@@ -36,5 +36,9 @@
 		"vite": "^4.4.2",
 		"vitest": "^0.32.2"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"pg": "^8.11.3",
+		"web-push": "^3.6.6"
+	}
 }
