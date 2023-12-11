@@ -1,64 +1,138 @@
 <script>
-	import Navbar from '../../lib/navbar.svelte';
-	import Footer from '../../lib/footer.svelte';
-	import Product from './product.svelte';
-	import Information from './information.svelte';
-	import Placeholder from '$lib/assets/placeholder.jpeg';
-	import { Button } from 'flowbite-svelte';
-	let product = 'Apple';
-	const tamimi = {
-		company: 'Tamimi',
-		product: product,
-		cost: 1
-	};
+// @ts-nocheck
 
-	const lulu = {
-		company: 'Lulu Supermarket',
-		product: product,
-		cost: 1.5
-	};
-
-	const othaim = {
-		company: 'Alothaim',
-		product: product,
-		cost: 0.86
-	};
+    export let pname
+    export let bname
 </script>
 
-<Navbar />
+<main>
 
-<div class="container">
-	<img src={Placeholder} alt="" />
-	<p class="brand"></p>
-</div>
 
-<Footer />
+    <div class="product-details">
+        <h1 class="product-name">Instand Noodles</h1>
+        <div class="details">
+            <div class="brand-container">
+                <span class="brand">Brand</span>
+                <span class="brand-name">Indomie</span>
+            </div>
+            <div class="compare-container">
+                <p class="compare-text">Compare Prices:</p>
+                <div class="compare-by-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+    </div>
+</main>
 
 <style>
-	.container {
-		display: flex;
-		width: 226px;
-		height: 310px;
-		padding: var(--6, 24px);
-		flex-direction: column;
-		align-items: flex-start;
-		gap: var(--0, 0px);
-		border-radius: var(--rounded-lg, 8px);
-		border: 1px solid var(--gray-200, #e5e7eb);
-		background: var(--white, #fff);
+    main {
+        display: flex;
+        padding: 48px;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        gap: 24px;
+        flex: 1 0 0;
+        align-self: stretch;
+        flex-wrap: wrap;
+    }
 
-		/* shadow-md */
-		box-shadow:
-			0px 2px 4px -2px rgba(0, 0, 0, 0.05),
-			0px 4px 6px -1px rgba(0, 0, 0, 0.1);
-	}
+    .product-details{
+        display: flex;
+        min-width: 261.999px;
+        padding: 10px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex: 1 0 0;
+    }
 
-	img {
-		width: 172px;
-		height: 172px;
-	}
+    .product-name{
+        align-self: stretch;
+        color: var(--gray-900, #111928);
+        /* leading-tight/text-4xl/font-bold */
+        font-family: Inter;
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 125%; /* 45px */
+    }
 
-	.brand {
-		width: 125.333px;
-	}
+    .details{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        align-self: stretch;
+        border-radius: var(--Boxed, 0px);
+    }
+
+    .brand-container{
+        display: flex;
+        padding: var(--0, 0px);
+        align-items: flex-start;
+        gap: var(--2, 8px);
+        align-self: stretch;
+        border-radius: var(--Boxed, 0px);
+    }
+
+    .brand{
+        color: var(--gray-900, #111928);
+        /* text-base/font-medium */
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%; /* 24px */
+    }
+
+    .brand-name{
+        flex: 1 0 0;
+        color: var(--gray-900, #111928);
+        /* text-base/font-bold */
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 150%; /* 24px */
+    }
+
+    .compare-container{
+        display: flex;
+        padding: var(--0, 0px);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--2, 8px);
+        align-self: stretch;
+        border-radius: var(--Boxed, 0px);
+    }
+
+    .compare-text{
+        align-self: stretch;
+        color: var(--gray-900, #111928);
+        /* text-base/font-medium */
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%; /* 24px */
+    }
+
+    .compare-by-container{
+        display: flex;
+        padding: var(--0, 0px);
+        align-items: flex-start;
+        align-content: flex-start;
+        gap: 12px;
+        align-self: stretch;
+        flex-wrap: wrap;
+        border-radius: var(--Boxed, 0px);
+    }
 </style>
