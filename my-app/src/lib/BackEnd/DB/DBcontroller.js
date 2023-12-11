@@ -304,5 +304,6 @@ export {
 	userNotifications,
 	psuhAllNotifications,
 	mainPage,
-	frontpage
+	frontpage,
+	listing
 };

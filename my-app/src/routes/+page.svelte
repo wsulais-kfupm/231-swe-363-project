@@ -14,7 +14,7 @@
 
     const getinfo=async()=>{
         let products=[]
-        const res=await fetch('/api/mainpage/1')
+        const res=await fetch('/api/mainpage/')
 
         let json = await res.json()
         for (const product of json){
@@ -22,7 +22,7 @@
                 method: 'post',
                 body:JSON.stringify(product)
             })
-            product.variants=await listing.json()
+            product.variants= await listing.json()
         }
         for (const product of json){
          if(product.variants && product.variants.length!=0  ){
