@@ -3,6 +3,7 @@
 	import { SearchOutline, CogOutline, BarsSolid } from 'flowbite-svelte-icons';
 	import LangDropdown from './dropdown.svelte';
 	import Search from './search.svelte';
+	import Branding from './Branding.svelte';
 
  export let links = [
 	 { href: '/supermarkets', name: 'Supermarkets' },
@@ -18,6 +19,7 @@
 
 <header class="nav-container gap-4 py-4">
 	<div class="mid md:!hidden flex !flex-row justify-around">
+		<Branding style="display: none;" />
 		{#if path.length > 1}
 			<Breadcrumb class="overflow-auto" aria-label="Solid background breadcrumb example" solid>
 				{#each path as { href, name }}
@@ -33,6 +35,7 @@
 		class="navbar flex-col md:flex-row md:!flex md:gray-200 gap-4 md:gap-8 max-md:bg-gray-200 max-md:shadow-inner max-md:!py-8"
 		style:display={open ? 'flex' : 'none'}
 	>
+		<Branding class="max-md:hidden" />
 		{#each links as { href, name }}
 			<a {href}>{name}</a>
 		{/each}
