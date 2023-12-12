@@ -245,7 +245,17 @@ function urlBase64ToUint8Array(base64String) {
         })
 
     })}
-   
+    function search(pname_slug){
+		return new Promise( function (resolve) {
+			client.query(`SELECT * from product where pname_slug=$1`,[pname_slug],async (/** @type {any} */ err,/** @type {{ rows: any; }} */ res)=>{
+				if(err) console.log(err)
+				let rows=res.rows
+					resolve(rows)
+			   
+			})
+	
+		})}
+	   
     function frontpage(limit){
         return new Promise( function (resolve) {
             client.query(`SELECT * from product limit $1`,[limit],async (/** @type {any} */ err,/** @type {{ rows: any; }} */ res)=>{
@@ -305,5 +315,6 @@ export {
 	psuhAllNotifications,
 	mainPage,
 	frontpage,
-	listing
+	listing,
+	search
 };

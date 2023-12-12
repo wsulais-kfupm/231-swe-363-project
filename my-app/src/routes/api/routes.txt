@@ -1,0 +1,28 @@
+/api/mainpage
+Method: GET
+params: none
+body: none
+returns list of all products
+Note: should be used with /api/listing
+
+/api/mainpage/[limit]
+Method: GET
+params: limit: a positive integer that indicates the limit
+body: none
+returns list of products, the max size of that list is the limit
+Note: should be used with /api/listing
+
+/api/listing
+Method: POST
+params: none
+body: should be a row from the product table (an example can be found on the products page)
+returns all the variants of the product and their cheapest price listing 
+
+/api/table/[tableName]
+Method: GET
+params: tableName: a string, which is the name of the table needed
+body: None
+returns all rows of a table specified by tableName
+
+/api/search
+work in progress
