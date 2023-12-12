@@ -1,52 +1,49 @@
 <script>
-	import { Search, Button, Dropdown, DropdownItem } from 'flowbite-svelte';
-	import { SearchOutline, ChevronDownSolid } from 'flowbite-svelte-icons';
+	import {
+		Search,
+		Select,
+		Button,
+		Input,
+		ButtonGroup,
+		InputAddon,
+		Dropdown,
+		DropdownItem,
+		DropdownDivider
+	} from 'flowbite-svelte';
+	import { SearchOutline, ChevronDownSolid, UserCircleSolid } from 'flowbite-svelte-icons';
 
-	const items = [
+	export let categories = [
 		{
-			label: 'Categories'
+			name: 'Food & Drinks',
+			value: 'food-drinks'
 		},
 		{
-			label: 'Mockups'
+			name: 'Disposables',
+			value: 'disposables'
 		},
 		{
-			label: 'Templates'
-		},
-		{
-			label: 'Design'
-		},
-		{
-			label: 'Logos'
+			name: 'Household',
+			value: 'household'
 		}
 	];
 
-	let selectCategory = 'Categories';
+	// HACK: properly submit the form without refreshing the page.
+	function submit() {
+		document.getElementById('search-form').submit();
+	}
 </script>
 
-<form class="flex">
-	<div class="relative">
-		<Button
-			color="light"
-			class="rounded-e-none whitespace-nowrap border border-e-0 border-primary-700"
-		>
-			{selectCategory}
-			<ChevronDownSolid class="w-2.5 h-2.5 ms-2.5" />
-		</Button>
-		<Dropdown>
-			{#each items as { label }}
-				<DropdownItem
-					on:click={() => {
-						selectCategory = label;
-					}}
-					class={selectCategory === label ? 'underline' : ''}
-				>
-					{label}
-				</DropdownItem>
+<form id="search-form" class="flex" method="GET" action="/product">
+	<ButtonGroup class="w-full">
+		<Select name="category" placeholder="Choose a category" class="rounded-e-none rtl:border-e-0 ">
+			<option selected value="">All Categories</option>
+			{#each categories as { value, name }}
+				<option {value}>{name}</option>
 			{/each}
-		</Dropdown>
-	</div>
-	<Search size="md" class="rounded-none py-2.5" placeholder="Search Products" />
-	<Button color="blue" class="!p-2.5 rounded-s-none">
-		<SearchOutline class="w-4 h-4" />
-	</Button>
+		</Select>
+		<Input name="name" placeholder="Seach Products" />
+		<Button color="blue" on:click={submit} class="!p-2.5 !rounded-s-none !rounded-e-lg">
+			<SearchOutline class="w-4 h-4" />
+		</Button>
+	</ButtonGroup>
 </form>
