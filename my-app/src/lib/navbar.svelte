@@ -1,20 +1,43 @@
 <script>
 	import { Navbar, Breadcrumb, BreadcrumbItem, Button, DarkMode } from 'flowbite-svelte';
-	import { SearchOutline, CogOutline } from 'flowbite-svelte-icons';
+	import { SearchOutline, CogOutline, BarsSolid } from 'flowbite-svelte-icons';
 	import LangDropdown from './dropdown.svelte';
 	import Search from './search.svelte';
 
-	export let crumb = false;
-	export let path = [
-		{ href: '/', name: 'Home' },
-		{ href: 'product', name: 'Products' }
-	];
+ export let links = [
+	 { href: '/supermarkets', name: 'Supermarkets' },
+	 { href: '/electronics', name: 'Electronics' }
+ ];
+ export let path = [
+	 { href: '/', name: 'Home' },
+	 { href: 'product', name: 'Products' }
+ ];
+
+ let open = false;
 </script>
 
-<header class="nav-container">
-	<div class="navbar">
-		<div class="text"><span>Supermarkets</span></div>
-		<div class="mid">
+<header class="nav-container gap-4">
+	<div class="mid md:!hidden flex !flex-row justify-center">
+		{#if path.length > 1}
+			<Breadcrumb class="overflow-auto" aria-label="Solid background breadcrumb example" solid>
+				{#each path as { href, name }}
+					<BreadcrumbItem {href} home={href === '/'}>{name}</BreadcrumbItem>
+				{/each}
+			</Breadcrumb>
+		{/if}
+		<Button color="alternative" class="p-3" on:click={() => (open = !open)}>
+			<BarsSolid />
+		</Button>
+	</div>
+	<div
+		class="navbar flex-col md:flex-row md:!flex md:gray-200 gap-4 md:md:gap-8 max-md:bg-gray-200 max-md:shadow-inner max-md:!py-8"
+		style:display={open ? 'flex' : 'none'}
+	>
+		{#each links as { href, name }}
+			<a {href}>{name}</a>
+		{/each}
+		<!-- <LangDropdown /> -->
+		<div class="mid !hidden md:!flex">
 			{#if path.length > 1}
 				<Breadcrumb class="overflow-auto" aria-label="Solid background breadcrumb example" solid>
 					{#each path as { href, name }}
@@ -24,7 +47,6 @@
 			{/if}
 		</div>
 		<Search />
-		<LangDropdown />
 		<Button class="!p-2" color="alternative" alt="Settings" href="/settings"><CogOutline /></Button>
 	</div>
 </header>
@@ -33,7 +55,6 @@
 	.nav-container {
 		display: flex;
 		width: 100%;
-		padding: var(--6, 24px) var(--0, 0px);
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
@@ -43,7 +64,6 @@
 		display: flex;
 		padding: var(--0, 0px) 24px;
 		align-items: center;
-		gap: var(--8, 32px);
 		align-self: stretch;
 	}
 
