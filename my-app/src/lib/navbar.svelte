@@ -16,7 +16,7 @@
 		<div class="text"><span>Supermarkets</span></div>
 		<div class="mid">
 			{#if path.length > 1}
-				<Breadcrumb aria-label="Solid background breadcrumb example" solid>
+				<Breadcrumb class="overflow-auto" aria-label="Solid background breadcrumb example" solid>
 					{#each path as { href, name }}
 						<BreadcrumbItem {href} home={href === '/'}>{name}</BreadcrumbItem>
 					{/each}
