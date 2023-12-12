@@ -20,9 +20,7 @@
 </script>
 
 <div class="flex flex-col h-screen justify-between gap-4">
-	<div class="flex flex-col justify-between gap-4 p-4">
-		<Navbar {path} />
-		<slot style="height: 100vh;" />
-	</div>
+	<Navbar {path} />
+	<slot style="height: 100vh;" />
 	<Footer />
 </div>

@@ -16,8 +16,8 @@
  let open = false;
 </script>
 
-<header class="nav-container gap-4">
-	<div class="mid md:!hidden flex !flex-row justify-center">
+<header class="nav-container gap-4 py-4">
+	<div class="mid md:!hidden flex !flex-row justify-around">
 		{#if path.length > 1}
 			<Breadcrumb class="overflow-auto" aria-label="Solid background breadcrumb example" solid>
 				{#each path as { href, name }}
@@ -30,7 +30,7 @@
 		</Button>
 	</div>
 	<div
-		class="navbar flex-col md:flex-row md:!flex md:gray-200 gap-4 md:md:gap-8 max-md:bg-gray-200 max-md:shadow-inner max-md:!py-8"
+		class="navbar flex-col md:flex-row md:!flex md:gray-200 gap-4 md:gap-8 max-md:bg-gray-200 max-md:shadow-inner max-md:!py-8"
 		style:display={open ? 'flex' : 'none'}
 	>
 		{#each links as { href, name }}
