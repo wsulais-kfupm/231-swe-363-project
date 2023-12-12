@@ -35,7 +35,11 @@
 
 <form id="search-form" class="flex" method="GET" action="/product">
 	<ButtonGroup class="w-full">
-		<Select name="category" placeholder="Choose a category" class="rounded-e-none rtl:border-e-0 ">
+		<Select
+			name="category"
+			placeholder="Choose a category"
+			class="rounded-e-none rtl:border-e-0 truncate"
+		>
 			<option selected value="">All Categories</option>
 			{#each categories as { value, name }}
 				<option {value}>{name}</option>
