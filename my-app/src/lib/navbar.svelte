@@ -1,8 +1,7 @@
 <script>
 	import { Navbar, Breadcrumb, BreadcrumbItem, Button, DarkMode } from 'flowbite-svelte';
-	import { SearchOutline } from 'flowbite-svelte-icons';
+	import { SearchOutline, CogOutline } from 'flowbite-svelte-icons';
 	import LangDropdown from './dropdown.svelte';
-	import Setting from './setting.svelte';
 	import Search from './search.svelte';
 
 	export let crumb = false;
@@ -26,7 +25,7 @@
 		</div>
 		<Search />
 		<LangDropdown />
-		<Setting />
+		<Button class="!p-2" color="alternative" alt="Settings" href="/settings"><CogOutline /></Button>
 	</div>
 </header>
 
