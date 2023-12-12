@@ -19,8 +19,8 @@
 	$: console.log('Path:', path);
 </script>
 
-<div class="flex flex-col h-screen justify-between gap-4">
+<div class="flex flex-col h-screen justify-start items-center gap-4">
 	<Navbar {path} />
-	<slot style="height: 100vh;" />
+	<slot style="flex: 1;" />
 	<Footer />
 </div>

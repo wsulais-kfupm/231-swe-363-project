@@ -25,26 +25,43 @@
 	};
 	const search_product_name = $page.url.searchParams.get('name');
 	const search_category = $page.url.searchParams.get('category');
+	const search_max = $page.url.searchParams.get('max') ?? 25;
 </script>
 
-<main class="w-full px-8 flex-col justify-start items-start gap-8 inline-flex">
+<main class="w-full flex-1 px-8 flex-col justify-start items-start gap-8 inline-flex">
 	<h1 class="font-sans text-black text-5xl font-semibold font-['Inter'] leading-10">
-		{#if search_product_name}{`"${search_product_name}" in ${
-				search_category ?? 'All Categories'
-			}`}{:else}Products{/if}
+		{#if search_product_name}
+			"{search_product_name}" in
+			<a class=" text-blue-600" href={`/supermarkets/${search_category ?? ''}`}>
+				{search_category ?? 'All Categories'}
+			</a>
+		{:else}Products{/if}
 	</h1>
-	<section class="w-full flex-wrap justify-start gap-8 items-start inline-flex">
-		<Product />
-		<Product />
-		<Product />
-		<Product />
-		<Product />
-		<Product />
+	<!-- <section class="w-full flex-wrap justify-start gap-8 items-start inline-flex"> -->
+	<section class="w-full">
+		{#each Array(search_max) as _}
+			<Product />
+		{/each}
 	</section>
+	<aside>Filter here!</aside>
 </main>
 
 <style>
 	main {
+		max-width: 85vw;
+	}
+	/* @media only screen and (max-width: 1023px) {
+		main {
+		max-width: 90%;
+		}
+		} */
+	section {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+		grid-gap: 1rem;
+		justify-items: center;
+	}
+	.container {
 		display: flex;
 		padding: 48px;
 		justify-content: center;
