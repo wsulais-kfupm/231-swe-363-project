@@ -2,9 +2,11 @@
 	import '../app.pcss';
 	import { page } from '$app/stores';
 	import Navbar from '$lib/navbar.svelte';
+	import Footer from '$lib/footer.svelte';
 
 	const PATH_NAMES = {
-		'': 'Home'
+		'': 'Home',
+		product: 'Products'
 	};
 
 	$: pathRaw = $page.url.pathname?.split('/');
@@ -17,5 +19,10 @@
 	$: console.log('Path:', path);
 </script>
 
-<Navbar {path} />
-<slot />
+<div class="flex flex-col h-screen justify-between gap-4">
+	<div class="flex flex-col justify-between gap-4 p-4">
+		<Navbar {path} />
+		<slot style="height: 100vh;" />
+	</div>
+	<Footer />
+</div>
