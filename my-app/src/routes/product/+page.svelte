@@ -10,29 +10,38 @@
     onMount(async()=>{
         
     })
-    
     let compareGroup=''
     let variantGroup=''
-    let variants=[
-        {
-            src:Placeholder,
-            vname: 'Chicken Curry'
-        },
-        {
-            src:Placeholder,
-            vname: 'Special Curry'
-        },
-        {
-            src:Placeholder,
-            vname: 'Stir Fry'
-        },
-        {
-            src:Placeholder,
-            vname: 'Vegetable'
+    let product=[{"pname_slug":"Tea Bag","bname":"Lipton","img":null,"name":"\"ar\"=>\"كيس شاي\", \"en\"=>\"Tea Bag\", \"ja\"=>\"茶袋\""}]
+    let variantsJson=[{"variant_slug":"Peach","varid":2,"listing_id":3,"currency":"SAR","price":10,"url":"https://www.google.com/search?q=tide+detergent+powder&oq=tide+deter&gs_lcrp=EgZjaHJvbWUqBwgBEAAYgAQyBggAEEUYOTIHCAEQABiABDIHCAIQABiABDIHCAMQABiABDIHCAQQABiABDIHCAUQABiABDIHCAYQABiABDIHCAcQABiABDIHCAgQABiABDIHCAkQABiABNIBCDMzNTVqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8","quantity":120,"quantity_unit":"ML","quantity_pcs":6,"marketname":"Othaim"},{"variant_slug":"Mint","varid":1,"listing_id":1,"currency":"SAR","price":12,"url":"https://www.othaimmarkets.com/home-featured-products/haleyhoney1k.html","quantity":100,"quantity_unit":"ML","quantity_pcs":1,"marketname":"Othaim"}]
+    let variantObjects=[]
+    let variants=[]
+    let markets=[]
+    let quantities=[]
+    let group=(compareGroup, variantGroup)
+    function filterVariants(variantsJson){
+        for (let variantJson of variantsJson){
+            let variant={
+                vname:variantJson.variant_slug,
+                quantities:variantJson.quantity_pcs + "x" + variantJson.quantity + variantJson.quantity_unit,
+                price:variantJson.price+ " " + variantJson.currency,
+                market:variantJson.marketname
+            }
+            variants.push(variant.vname)
+            variantObjects.push(variant)
+            if (!markets.includes(variant.market)){
+                markets.push(variant.market)
+            }
+
+            if (!quantities.includes(variant.quantities)){
+                quantities.push(variant.quantities)
+            }
         }
-    ]
-    let markets=['Othaim', 'Panda', 'Tamimi']
-    let quantities=['75g', '5x75g', '20x75g']
+    }
+
+    filterVariants(variantsJson)
+    
+
 </script>
 
 <main>
@@ -41,11 +50,11 @@
         <img src={Placeholder}>
     </div>
     <div class="product-details">
-        <h1 class="product-name">Instand Noodles</h1>
+        <h1 class="product-name">{product[0].pname_slug}</h1>
         <div class="details">
             <div class="brand-container">
                 <span class="brand">Brand</span>
-                <span class="brand-name">Indomie</span>
+                <span class="brand-name">{product[0].bname}</span>
             </div>
             <div class="compare-container">
                 <p class="compare-text">Compare Prices:</p>
@@ -60,7 +69,7 @@
                 <div class="variant-listing">
                     {#if compareGroup=='Variant'}
                         {#each variants as variant}
-                            <Variant bind:group={variantGroup} type={'Variant'} text={variant.vname} src={variant.src} />
+                            <Variant bind:group={variantGroup} type={'Variant'} text={variant} src={Placeholder} />
                         {/each}
                     {:else if compareGroup=='Market'}
                         {#each markets as market}
@@ -75,7 +84,8 @@
             </div>
         </div>
     </div>
-    <Table bind:group={compareGroup}/>
+    
+    <Table bind:group={group} bind:vGroup={variantGroup} {markets} {quantities} {variants} {variantObjects}/>
 </main>
 <style>
 

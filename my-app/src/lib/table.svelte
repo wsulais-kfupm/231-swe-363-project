@@ -2,32 +2,41 @@
 // @ts-nocheck
 
     
-    let markets=['Tamimi', 'Othaim', 'Panda']
-    let variants=['Chicken Curry', 'Vegetables', 'Stir Fried']
-    let quantities=['75g', '5x75g', '20x75g']
+    export let markets
+    export let variants
+    export let quantities
+    export let variantObjects
     let yAxis
     let xAxis
     let yAxisText
-    export let group
-    $:{if (group=='Market'){
+    let filteredVariantObjects=[]
+    export let group=('', '')
+    let cGroup= group[0]
+    console.log('group:', group)
+    $:{
+        if (cGroup=='Market'){
         yAxis=variants
         xAxis=quantities
         yAxisText='Variants'
+       
     }
-    else if (group=='Variant'){
+    else if (cGroup=='Variant'){
         yAxis=markets
         xAxis=quantities
         yAxisText='Markets'
     }
     else if (group== 'Quantity'){
-        yAxis=variants
+        yAxis=markets
         xAxis=variants
-        yAxisText='Variants'
+        yAxisText='Markets'
     }
     else{
-        yAxis=['x', 'y', 'z']
-        xAxis=['x', 'y', 'z']
-    }}
+        yAxis=[' ', ' ', ' ']
+        xAxis=[' ', ' ', ' ']
+    }console.log('y')
+    }
+
+    $:{console.log('x')}
 </script>
 
 
@@ -44,9 +53,13 @@
     {#each yAxis as y}
         <tr>
             <td><div> <span class="value">{y}</span></div></td>
-            <td><div><span class="value">Forward</span></div></td>
-            <td><div><span class="value">Forward</span></div></td>
-            <td><div><span class="value">Forward</span></div></td>
+            {#each xAxis as x}
+                {#each filteredVariantObjects as variant}
+                    {#if variant.xAxis==x && variant.yAxis==y}
+                        <td><div><span class="value">{variant.price}</span></div></td>
+                    {/if}
+                {/each}
+            {/each}
         </tr>
     {/each}
 </table>
