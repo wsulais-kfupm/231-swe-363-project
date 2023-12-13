@@ -5,21 +5,21 @@
 	import Search from './search.svelte';
 	import Branding from './Branding.svelte';
 
- export let links = [
-	 { href: '/supermarkets', name: 'Supermarkets' },
-	 { href: '/electronics', name: 'Electronics' }
- ];
- export let path = [
-	 { href: '/', name: 'Home' },
-	 { href: 'product', name: 'Products' }
- ];
+	export let links = [
+		{ href: '/supermarkets', name: 'Supermarkets' },
+		{ href: '/electronics', name: 'Electronics' }
+	];
+	export let path = [
+		{ href: '/', name: 'Home' },
+		{ href: 'product', name: 'Products' }
+	];
 
- let open = false;
+	let open = false;
 </script>
 
 <header class="nav-container gap-4 py-4">
-	<div class="mid md:!hidden flex !flex-row justify-around">
-		<Branding style="display: none;" />
+	<div class="mid lg:!hidden flex !flex-row justify-around">
+		<Branding class="max-sm:hidden" />
 		{#if path.length > 1}
 			<Breadcrumb class="overflow-auto" aria-label="Solid background breadcrumb example" solid>
 				{#each path as { href, name }}
@@ -32,15 +32,15 @@
 		</Button>
 	</div>
 	<div
-		class="navbar flex-col md:flex-row md:!flex md:gray-200 gap-4 md:gap-8 max-md:bg-gray-200 max-md:shadow-inner max-md:!py-8"
+		class="navbar flex-col lg:flex-row lg:!flex lg:gray-200 gap-4 lg:gap-8 max-lg:bg-gray-200 max-lg:shadow-inner max-lg:!py-8"
 		style:display={open ? 'flex' : 'none'}
 	>
-		<Branding class="max-md:hidden" />
+		<Branding class="max-lg:sm:hidden" />
 		{#each links as { href, name }}
 			<a {href}>{name}</a>
 		{/each}
 		<!-- <LangDropdown /> -->
-		<div class="mid !hidden md:!flex">
+		<div class="mid !hidden lg:!flex">
 			{#if path.length > 1}
 				<Breadcrumb class="overflow-auto" aria-label="Solid background breadcrumb example" solid>
 					{#each path as { href, name }}
