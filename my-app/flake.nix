@@ -31,6 +31,7 @@
             nodePackages.tailwindcss
             nodePackages.prettier
             nodePackages.npm
+            nodePackages.pnpm
             nodePackages.nodejs
             html-tidy
             deno
