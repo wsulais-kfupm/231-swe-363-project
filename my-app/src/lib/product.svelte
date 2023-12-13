@@ -87,7 +87,6 @@
 
 	.product-info {
 		width: 226px;
-		height: 196px;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -172,6 +171,7 @@
 		padding: var(--4, 14px);
 		height: 18px;
 		flex-direction: column;
+		flex: 1;
 		justify-content: center;
 		align-items: center;
 		gap: var(--0, 0px);
