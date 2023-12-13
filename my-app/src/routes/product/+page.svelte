@@ -68,10 +68,8 @@
             </div>
         </div>
     </div>
-</main>
-<div class="table">
     <Table bind:group={compareGroup}/>
-</div>
+</main>
 <style>
 
     .product-image{
