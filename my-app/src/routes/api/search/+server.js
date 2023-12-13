@@ -1,8 +1,8 @@
 // @ts-nocheck
 import * as db from '$lib/BackEnd/DB/DBcontroller.js'
-    export const POST= async ({request}) =>{
-        const body=await request.json()
-        const res = await db.search(pname_slug)
+    export const GET= async ({url}) =>{
+        const product=url.searchParams.get('pname')
+        const res = await db.search(product)
         // @ts-ignore
         return new Response(JSON.stringify(res))
     }

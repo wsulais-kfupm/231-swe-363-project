@@ -17,13 +17,13 @@
         const res=await fetch('/api/mainpage/')
 
         let json = await res.json()
-        for (const product of json){
-            let listing =await fetch('/api/listing/',{
-                method: 'post',
-                body:JSON.stringify(product)
-            })
-            product.variants= await listing.json()
-        }
+        // for (const product of json){
+        //     let listing =await fetch('/api/listing/',{
+        //         method: 'post',
+        //         body:JSON.stringify(product)
+        //     })
+        //     product.variants= await listing.json()
+        // }
         for (const product of json){
          if(product.variants && product.variants.length!=0  ){
             products.push(filter(product))  

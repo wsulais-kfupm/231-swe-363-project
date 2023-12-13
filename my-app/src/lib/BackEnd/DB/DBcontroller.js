@@ -66,9 +66,10 @@ async function priceforproduct(productname) {
  */
 async function productVariant(product) {
 	return new Promise(function (resolve) {
-		client.query(
-			`SELECT * from Product_Variant where product_slug = "${product}"`,
-			(/** @type {any} */ err, /** @type {{ rows: any; }} */ res) => {
+		client.query(`select variant_slug,varid, b.listing_id,c.currency,price,url,quantity,quantity_unit,
+		quantity_pcs,marketname from product_variant a join product_listing b on  
+		a.var_id=b.varid join (select listing_id,currency as currency ,price as price from product_pricing) c on c.listing_id=b.listing_id where a.product_slug=$1`,[product]
+			,(/** @type {any} */ err, /** @type {{ rows: any; }} */ res) => {
 				if (err) console.log(err);
 				console.log(res);
 				resolve(res.rows);
@@ -237,11 +238,18 @@ function urlBase64ToUint8Array(base64String) {
         client.query(`SELECT * from product`,async (/** @type {any} */ err,/** @type {{ rows: any; }} */ res)=>{
             if(err) console.log(err)
             let rows=res.rows
-            
-             
-   
+
+				for(let i=0;i<rows.length;i++){
+					 rows[i].variants=await new Promise( function (ret) {
+                
+						client.query(`select variant_slug,varid, b.listing_id,c.currency,price,url,quantity,quantity_unit,quantity_pcs,marketname from 
+						product_variant a join product_listing b on  a.var_id=b.varid join (select listing_id,max(currency) as currency ,min(price) as price from product_pricing group by listing_id ) c on c.listing_id=b.listing_id where a.product_slug=$1`,[rows[i].pname_slug],(err,variant)=>{
+							ret(variant.rows)	
+						})
+
+				})
+				}
                 resolve(rows)
-           
         })
 
     })}
@@ -255,7 +263,7 @@ function urlBase64ToUint8Array(base64String) {
 			})
 	
 		})}
-	   
+	
     function frontpage(limit){
         return new Promise( function (resolve) {
             client.query(`SELECT * from product limit $1`,[limit],async (/** @type {any} */ err,/** @type {{ rows: any; }} */ res)=>{

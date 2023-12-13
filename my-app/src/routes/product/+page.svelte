@@ -4,6 +4,13 @@
     import Placeholder from '$lib/assets/placeholder.jpeg'
     import Compare from '$lib/compare.svelte'
     import Table from '$lib/table.svelte'
+	import { onMount } from 'svelte';
+    import { page } from '$app/stores';
+    export let data
+    onMount(async()=>{
+        
+    })
+    
     let compareGroup=''
     let variantGroup=''
     let variants=[
