@@ -3,6 +3,7 @@
 	import Footer from '../../lib/footer.svelte';
 	import Product from '$lib/product.svelte';
 	import Placeholder from '$lib/assets/placeholder.jpeg';
+	import FilterPane from '$lib/FilterPane.svelte';
 	import { Button } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	let product = 'Apple';
@@ -29,20 +30,23 @@
 </script>
 
 <main class="w-full flex-1 px-8 flex-col justify-start items-start gap-8 inline-flex">
-	<h1 class="font-sans text-black text-5xl font-semibold font-['Inter'] leading-10">
-		{#if search_product_name}
-			"{search_product_name}" in
-			<a class=" text-blue-600" href={`/supermarkets/${search_category ?? ''}`}>
-				{search_category ?? 'All Categories'}
-			</a>
-		{:else}Products{/if}
-	</h1>
-	<!-- <section class="w-full flex-wrap justify-start gap-8 items-start inline-flex"> -->
-	<section class="w-full">
+	<div class="w-full sticky top-0 bg-white pt-4">
+		<h1 class="font-sans text-black text-5xl font-semibold font-['Inter'] leading-10">
+			{#if search_product_name}
+				"{search_product_name}" in
+				<a class=" text-blue-600" href={`/supermarkets/${search_category ?? ''}`}>
+					{search_category ?? 'All Categories'}
+				</a>
+			{:else}Products{/if}
+		</h1>
+		<FilterPane />
+
+	</div>
+	<section class="w-full products">
 		{#each Array(search_max) as _}
 			<Product />
 		{/each}
-	</section>
+	<section />
 	<aside>Filter here!</aside>
 </main>
 
