@@ -161,10 +161,11 @@ function urlBase64ToUint8Array(base64String) {
             </div>
         </div>
     </div>
-</main>
-<div class="">
     <Table bind:group={group} bind:vGroup={variantGroup} {markets} {quantities} {variants} {variantObjects}/>
-</div>
+</main>
+
+    
+
 
 <style>
 
