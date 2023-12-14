@@ -17,9 +17,11 @@
 	<h1 class="font-sans text-black text-5xl font-semibold font-['Inter'] leading-10">
 		Popular Categories
 	</h1>
-	<section>
-    {#each market.categoryCollection.edges as cate}
-      <p><a href="./{market.id}/category/{cate.node.slug}">{cate.node.name["en"]}</a></p>
+	<section class="category-cards">
+    {#each market.categoryCollection.edges as {node: cate}}
+			<a href="./supermarket/category/{cate.slug}">
+			<Category cname={cate?.name?.en} src={FB} color="blue" />
+			</a>
     {/each}
   </section>
 	<h1 class="font-sans text-black text-5xl font-semibold font-['Inter'] leading-10">
@@ -35,6 +37,16 @@
 		align-items: center;
 	}
 
+	.category-cards {
+		display: flex;
+		/* height: 257px; */
+		align-items: flex-start;
+		gap: 32px;
+		align-self: stretch;
+		flex-wrap: wrap;
+		border-radius: var(--Boxed, 0px);
+	}
+
 	.category-container {
 		display: flex;
 		justify-content: space-between;
@@ -47,3 +59,4 @@
 		margin-right: 20px;
 	}
 </style>
+

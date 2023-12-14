@@ -396,6 +396,8 @@ try:
                 )
             },
         )
+        for variant in product.variants:
+            print(variant.images)
 except BrokenPipeError:
     # Python flushes standard streams on exit; redirect remaining output
     # to devnull to avoid another BrokenPipeError at shutdown

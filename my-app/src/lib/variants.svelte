@@ -2,13 +2,20 @@
 // @ts-nocheck
 
     export let group
-    export let src
+    export let src = null;
     export let text
+    export let value;
     export let type
+
+    function setGroup() {
+        console.log("Setting selector group to:", value, typeof(value))
+        group = text
+    }
+
 </script>
 
 <button on:click={()=>group = text} class={group === text ? 'selected' : 'unselected'}>
-{#if type=='Variant'}
+{#if src}
     <img {src}><span>{text}</span>
 {:else}
     <span>{text}</span>

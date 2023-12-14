@@ -11,3 +11,6 @@
 {#each categories as { node: category }}
   <p><a href="./category/{category.slug}">{category.name["en"]}</a></p>
 {/each}
+
+
+

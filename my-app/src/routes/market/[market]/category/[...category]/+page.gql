@@ -1,24 +1,23 @@
-query MarketCategory($market: String!, $category: String!) {
-	marketCollection(filter: { id: {eq: $market}}) {
-		edges {
-			node {
-        categoryCollection(filter: {slug: { eq: $category }}) {
+query CategoryProducts($market: String!, $category: String!) {
+  marketCollection(filter: {id: {eq: $market}}) {
+    edges {
+      node {
+        categoryCollection(filter: { parent: { is: NULL }, slug: { eq: $category }}) {
           edges {
             node {
-              name,
+              slug
+              name
               productCollection {
                 edges {
                   node {
-                    name,
-                    ...ProductInfo
+                    ... ProductInfo
                   }
-                },
-                totalCount
+                }
               }
             }
           }
         }
-			}
-		}
-	}
+      }
+    }
+  }
 }

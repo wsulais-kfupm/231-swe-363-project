@@ -8,6 +8,7 @@
     export let product: ProductInfo
     $: info = fragment(product, graphql(`
 	    fragment ProductInfo on Product {
+					pnameSlug,
 	        name,
 					img,
 					brand {
@@ -60,13 +61,13 @@
 </script>
 
 <div class="product-container">
-	<div class="product-img !flex-1">
+	<a href={`/product/${$info?.pnameSlug}`} class="product-img !flex-1">
 		<img src={$info?.img} />
-	</div>
+	</a>
 
 	<div class="product-info">
-		<p class="brand">{$info?.brand?.name["ja"]}</p>
-		<h1 class="product-name">{$info?.name["ja"]}</h1>
+		<p class="brand">{$info?.brand?.name["en"]}</p>
+		<h1 class="product-name">{$info?.name["en"]}</h1>
 		<div class="weights-container">
 			<div class="weights">
 				<!--Loops through weight  -->

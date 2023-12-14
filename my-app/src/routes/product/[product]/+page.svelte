@@ -88,62 +88,56 @@ function urlBase64ToUint8Array(base64String) {
 	return outputArray;
 }
 
- 
-    let compareGroup=''
-    let variantGroup=''
-    let product=[{"pname_slug":"Tea Bag","bname":"Lipton","img":null,"name":"\"ar\"=>\"كيس شاي\", \"en\"=>\"Tea Bag\", \"ja\"=>\"茶袋\""}]
-    let variantsJson=[{"variant_slug":"Peach","varid":2,"listing_id":3,"currency":"SAR","price":10,"url":"https://www.google.com/search?q=tide+detergent+powder&oq=tide+deter&gs_lcrp=EgZjaHJvbWUqBwgBEAAYgAQyBggAEEUYOTIHCAEQABiABDIHCAIQABiABDIHCAMQABiABDIHCAQQABiABDIHCAUQABiABDIHCAYQABiABDIHCAcQABiABDIHCAgQABiABDIHCAkQABiABNIBCDMzNTVqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8","quantity":120,"quantity_unit":"ML","quantity_pcs":6,"marketname":"Othaim"},{"variant_slug":"Mint","varid":1,"listing_id":1,"currency":"SAR","price":12,"url":"https://www.othaimmarkets.com/home-featured-products/haleyhoney1k.html","quantity":100,"quantity_unit":"ML","quantity_pcs":1,"marketname":"Othaim"}]
-    let variantObjects=[]
-    let variants=[]
-    let markets=[]
-    let quantities=[]
-    let group=(compareGroup, variantGroup)
-    function filterVariants(variantsJson){
-        for (let variantJson of variantsJson){
-            let variant={
-                vname:variantJson.variant_slug,
-                quantities:variantJson.quantity_pcs + "x" + variantJson.quantity + variantJson.quantity_unit,
-                price:variantJson.price+ " " + variantJson.currency,
-                market:variantJson.marketname
-            }
-            variants.push(variant.vname)
-            variantObjects.push(variant)
-            if (!markets.includes(variant.market)){
-                markets.push(variant.market)
-            }
+    let compareGroup = 'Variant'
+    $: console.log("Selected:", compareGroup , variantGroup, typeof(variantGroup))
 
-            if (!quantities.includes(variant.quantities)){
-                quantities.push(variant.quantities)
-            }
-        }
-    }
+    $: product = $ProductDetails.data.productCollection.edges[0].node
+    $: variants = product.productVariantCollection.edges
+    $: quantities = product.productQuantityCollection.edges
+    $: stores = variants.map(v => v?.node?.productListingCollection?.edges[0]?.node.store)
 
-    filterVariants(variantsJson)
+    let variantGroup = null
+    let variantGroupObject = null
+    $: variantGroup = variantGroup ?? variants[0].node
+    $: variantGroupObject = variantGroupObject ?? (typeof(variantGroup) === "object" ? variantGroup : null)
+
+    $: console.log("Stores:",stores)
+
+    let formatQuantity = quantity => 
+    (quantity.count > 1 ? `${quantity.count}×` : "") + Intl.NumberFormat("en", { style: "unit", unit: quantity.unit }).format(quantity.quantity);
+
+    let formatPrice = price => price ?  Intl.NumberFormat("en", { style: "currency", currency: price?.currency ?? "SAR" }).format(price?.price) : null
+
+    $: rowHeaders = compareGroup !== "Store" ? stores.map(s => s?.name?.en) : variants.map(q => q?.node?.name?.en) 
+    $: columnHeaders = compareGroup === "Variant" ? quantities.map(q => formatQuantity(q?.node)) :  variants.map(q => q?.node?.name?.en) 
+    let tableData: float[][];
+    $: tableData = variantGroupObject.productListingCollection?.edges.map(l => l.node.priceDeltaCollection.edges.map(p => p.node))
     
 
+    $: console.log("Table: ", rowHeaders, columnHeaders, tableData)
 </script>
 
 <main>
 
     <div class='product-image'>
-        <img src={Placeholder}>
+        <img src={variants[variantGroup === "Peach" ? 1 : 0]?.node?.productListingCollection?.edges[0]?.node?.image}>
     </div>
     <div class="product-details">
         <div class="notify">
             <Button color='light'>Notify Me</Button>
         </div>
         
-        <h1 class="product-name">{product[0].pname_slug}</h1>
+        <h1 class="product-name">{product?.name?.en}</h1>
         <div class="details">
             <div class="brand-container">
                 <span class="brand">Brand</span>
-                <span class="brand-name">{product[0].bname}</span>
+                <span class="brand-name">{product?.brand?.name?.en}</span>
             </div>
             <div class="compare-container">
                 <p class="compare-text">Compare Prices:</p>
                 <!-- Comparison Buttons -->
                 <div class="compare-by-container">
-                    {#each ['Market', 'Variant', 'Quantity'] as type}
+                    {#each ['Store', 'Variant', 'Quantity'] as type}
                         <Compare bind:group={compareGroup} {type} />
                     {/each}
                 </div>
@@ -151,29 +145,130 @@ function urlBase64ToUint8Array(base64String) {
             <div class='variant-container'>
                 <div class="variant-listing">
                     {#if compareGroup=='Variant'}
-                        {#each variants as variant}
-                            <Variant bind:group={variantGroup} type={'Variant'} text={variant} src={Placeholder} />
+                        {#each variants as {node : variant}}
+                            <Variant bind:group={variantGroup} type={'Variant'}, value={variant?.name?.en}, text={variant?.name?.en} src={variant?.productListingCollection?.edges[0]?.node?.image} />
                         {/each}
                     {:else if compareGroup=='Market'}
-                        {#each markets as market}
-                            <Variant bind:group={variantGroup} type={"Market"}, text={market} />
+                        {#each stores as store}
+                            <Variant bind:group={variantGroup} type={'Store'}, value={store}, text={store?.name?.en} />
                         {/each}
                     {:else if compareGroup=='Quantity'}
-                        {#each quantities as quantity}
-                            <Variant bind:group={variantGroup} type={'Quantity'}, text={quantity} />
+                        {#each quantities as {node : quantity}}
+                            <Variant bind:group={variantGroup} type={'Quantity'}, value={quantity?.name?.en}, text={formatQuantity(quantity)} />
                         {/each}
                     {/if}
                 </div>  
             </div>
         </div>
     </div>
-    <Table bind:group={group} bind:vGroup={variantGroup} {markets} {quantities} {variants} {variantObjects}/>
+
+    <table>
+        {#each rowHeaders as row, i}
+            {#if i === 0}
+                <tr>
+                <th />
+                {#each columnHeaders as col, j}
+                    <th>
+                        <div>
+                        <span class="header">
+                        {col}
+                        </span>
+                        </div>
+                    </th>
+                {/each}
+                </tr>
+            {:else}
+                <tr>
+                <th>{row}</th>
+                {#each columnHeaders as _, j}
+                    <td> <div> <span class="value"> {formatPrice(tableData?.[i-1]?.[j]) ?? "-"} </span> </div>  </td>
+                {/each}
+                </tr>
+            {/if}
+        {/each}
+
+    </table>
+
 </main>
 
     
 
 
 <style>
+
+
+    table{
+        display: flex;
+        min-width: var(--max-w-xs, 400px);
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 0 0;
+        border-radius: 4px;
+        background: #363636;
+        /* shadow */
+        box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10);
+    }
+    th{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+        border-top: 1px solid var(--gray-300, #D1D5DB);
+        border-right: var(--Boxed, 0px) solid var(--gray-300, #D1D5DB);
+        border-bottom: var(--Boxed, 0px) solid var(--gray-300, #D1D5DB);
+        border-left: var(--Boxed, 0px) solid var(--gray-300, #D1D5DB);
+        background: var(--gray-200, #E5E7EB);
+    }
+
+    tr{
+        display: flex;
+        align-items: flex-start;
+        align-self: stretch;
+        background: var(--black, #000);
+    }
+
+    div{
+        display: flex;
+        padding: 10px 12px;
+        align-items: flex-start;
+        align-self: stretch;
+        border-radius: var(--Boxed, 0px);
+    }
+    td{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+        border-top: 1px solid var(--gray-300, #D1D5DB);
+        border-right: var(--Boxed, 0px) solid var(--gray-300, #D1D5DB);
+        border-bottom: var(--Boxed, 0px) solid var(--gray-300, #D1D5DB);
+        border-left: var(--Boxed, 0px) solid var(--gray-300, #D1D5DB);
+        background: var(--gray-50, #F9FAFB);
+    }
+
+    .header{
+        color: var(--black, #000);
+        text-align: center;
+        font-family: Inter;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 130%; /* 15.6px */
+    }
+
+    .value{
+        flex: 1 0 0;
+        color: var(--black, #000);
+        font-family: Inter;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 130%; /* 15.6px */
+    }
 
     .product-image{
         display: flex;

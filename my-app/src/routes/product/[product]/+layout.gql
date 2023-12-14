@@ -9,6 +9,9 @@ query ProductDetails($product: String) {
         },productQuantityCollection{
           edges{
             node{
+              quantity,
+              count,
+              unit
               productListingCollection{
                 edges{
                   node{
@@ -19,6 +22,7 @@ query ProductDetails($product: String) {
                       name
                     }
                     url,
+                    image
                     priceDeltaCollection(first:1){
                       edges{
                         node{
@@ -45,6 +49,7 @@ query ProductDetails($product: String) {
                   	productQuantity{
                       unit,quantity,count
                     }
+                    image
                     url,
                     priceDeltaCollection(first:1){
                       edges{

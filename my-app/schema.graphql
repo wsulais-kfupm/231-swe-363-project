@@ -1139,6 +1139,7 @@ type ProductInsertResponse {
 }
 
 type ProductListing implements Node {
+  image: String
   listingId: Int!
 
   """Globally Unique Record Identifier"""
@@ -1212,6 +1213,7 @@ input ProductListingFilter {
   Returns true only if all its inner filters are true, otherwise returns false
   """
   and: [ProductListingFilter!]
+  image: StringFilter
   listingId: IntFilter
   nodeId: IDFilter
 
@@ -1229,6 +1231,7 @@ input ProductListingFilter {
 }
 
 input ProductListingInsertInput {
+  image: String
   listingId: Int
   quantity: BigInt
   store: String
@@ -1245,6 +1248,7 @@ type ProductListingInsertResponse {
 }
 
 input ProductListingOrderBy {
+  image: OrderByDirection
   listingId: OrderByDirection
   quantity: OrderByDirection
   store: OrderByDirection
@@ -1253,6 +1257,7 @@ input ProductListingOrderBy {
 }
 
 input ProductListingUpdateInput {
+  image: String
   listingId: Int
   quantity: BigInt
   store: String
