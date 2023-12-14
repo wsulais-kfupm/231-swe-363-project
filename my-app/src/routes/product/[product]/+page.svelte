@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
 // @ts-nocheck
     import Variant from '$lib/variants.svelte'
     import Placeholder from '$lib/assets/placeholder.jpeg'
@@ -7,9 +7,15 @@
 	import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import { dev } from '$app/environment';
-
+    
     import { Button } from 'flowbite-svelte';
-    export let data
+
+    import type { PageData } from './$houdini'
+    export let data: PageData
+
+    $: ({ ProductDetails } = data)
+	$: console.log("Product deta: ", $ProductDetails)
+
     onMount(async()=>{
         // Register a Service Worker.
         navigator.serviceWorker.getRegistration('/service-worker.js').then(function (registration) {

@@ -1,0 +1,65 @@
+
+query ProductDetails($product: String) {
+  productCollection(filter: {pnameSlug: {eq:$product}}) {
+    edges {
+      node {
+       name,
+        brand {
+          name
+        },productQuantityCollection{
+          edges{
+            node{
+              productListingCollection{
+                edges{
+                  node{
+                    store {
+                      name
+                    },
+                  	productVariant{
+                      name
+                    }
+                    url,
+                    priceDeltaCollection(first:1){
+                      edges{
+                        node{
+                          price,currency,delta
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        productVariantCollection{
+          edges{
+            node{
+              name,
+              productListingCollection{
+                edges{
+                  node{
+                    store {
+                      name
+                    },
+                  	productQuantity{
+                      unit,quantity,count
+                    }
+                    url,
+                    priceDeltaCollection(first:1){
+                      edges{
+                        node{
+                          price,currency,delta
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+					}
+        }
+      }
+    }
+  }
+}
