@@ -2,7 +2,7 @@
 import * as db from '$lib/BackEnd/DB/DBcontroller.js'
     export const POST= async ({request}) =>{
         const body=await request.json()
-        const res = await db.productVariant(body.pname_slug)
+        db.addEndPoint(body)
         // @ts-ignore
-        return new Response(JSON.stringify(res))
+        return new Response(JSON.stringify({message:'done'}))
     }

@@ -184,14 +184,14 @@ async function pushNotification(subscription) {
 	userNotifications(subscription.endpoint).then((data) => {
 		for (let i = 0; i < data.length; i++) {
 			client.query(
-				'SELECT price,v.variant_slug from product_Pricing a join product_listing l on a.listing_id=l.listing_id join product_variant v on l.varid = v.var_id where a.listing_ID in (select listing_ID from product_listing where varid = $1) order by price ',
+				'SELECT price,v.slug from product_Pricing a join product_listing l on a.listing=l.listing_id join product_variant v on l.variant = v.var_id where a.listing in (select listing_ID from product_listing where variant = $1) order by price ',
 				[data[i].var_id],
 				(/** @type {any} */ err, /** @type {{ rows: any[]; }} */ res) => {
 					if (err) console.log('there is an error here');
 					let row = res.rows[0];
 					console.log(row + 'uhaiufoiuasbfuhabrvfiasiufwewefhfsbfokjfewai');
 					const payload = {
-						title: 'DEALS ON ' + row.variant_slug,
+						title: 'DEALS ON ' + row.slug,
 						body: 'Cheapest Price is ' + row.price,
 						tag: '123',
 						clickUrl: 'https://' + data[0].var_id
@@ -326,3 +326,4 @@ export {
 	listing,
 	search
 };
+	
