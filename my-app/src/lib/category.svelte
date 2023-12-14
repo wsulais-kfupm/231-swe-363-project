@@ -33,27 +33,15 @@
 			0px 4px 6px -1px rgba(0, 0, 0, 0.1);
 	}
 
-	.img {
-		width: 494px;
-		height: 278px;
-		position: relative;
-		right: -71.75px;
-		bottom: -23px;
-		border-radius: var(--Boxed, 0px);
-		z-index: -1;
-	}
+	h1{
+		align-self: stretch;
+		color: var(--white, #FFF);
 
-	.gradient {
-		position: relative;
-		display: inline-block;
-	}
-
-	.gradient::after {
-		background:
-			linear-gradient(157deg, rgba(28, 100, 242, 0) 36.24%, #0e3583 82.97%),
-			lightgray 50% / cover no-repeat;
-		position: relative;
-		top: 0;
-		left: 0;
-	}
+		/* leading-tight/text-3xl/font-bold */
+		font-family: Inter;
+		font-size: 30px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 125%; /* 37.5px */
+	}	
 </style>

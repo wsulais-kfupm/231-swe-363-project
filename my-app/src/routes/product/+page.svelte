@@ -6,6 +6,7 @@
     import Table from '$lib/table.svelte'
 	import { onMount } from 'svelte';
     import { page } from '$app/stores';
+    import { Button } from 'flowbite-svelte';
     export let data
     onMount(async()=>{
         
@@ -50,6 +51,10 @@
         <img src={Placeholder}>
     </div>
     <div class="product-details">
+        <div class="notify">
+            <Button color='light'>Notify Me</Button>
+        </div>
+        
         <h1 class="product-name">{product[0].pname_slug}</h1>
         <div class="details">
             <div class="brand-container">
@@ -84,9 +89,11 @@
             </div>
         </div>
     </div>
-    
-    <Table bind:group={group} bind:vGroup={variantGroup} {markets} {quantities} {variants} {variantObjects}/>
 </main>
+<div class="">
+    <Table bind:group={group} bind:vGroup={variantGroup} {markets} {quantities} {variants} {variantObjects}/>
+</div>
+
 <style>
 
     .product-image{
@@ -106,6 +113,12 @@
         flex: 1 0 0;
         align-self: stretch;
         flex-wrap: wrap;
+    }
+
+    .notify {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
     }
     .table{
         display: block; 
