@@ -1,8 +1,22 @@
-<script>
+<script lang="ts">
 	import '../app.pcss';
 	import { page } from '$app/stores';
 	import Navbar from '$lib/navbar.svelte';
 	import Footer from '$lib/footer.svelte';
+
+
+    import type { PageData } from './$houdini'
+
+    export let data: PageData
+
+    $: ({ MarketLinks } = data)
+
+	$: markets = $MarketLinks?.data?.marketCollection?.edges?.map(m => {
+		const href = `/market/${m.node.id}`;
+	  return { href, name: m.node.name["en"] }
+	})
+
+	$: console.log("GraphQL markets:", markets)
 
 	const PATH_NAMES = {
 		'': 'Home',
@@ -20,7 +34,7 @@
 </script>
 
 <div class="flex flex-col h-screen justify-start items-center gap-4">
-	<Navbar {path} />
+	<Navbar {path} links={markets} />
 	<slot style="flex: 1;" />
 	<Footer />
 </div>

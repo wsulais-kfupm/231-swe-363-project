@@ -1,0 +1,10 @@
+query MarketLinks {
+	marketCollection {
+		edges {
+			node {
+        id
+        name
+			}
+		}
+	}
+}
