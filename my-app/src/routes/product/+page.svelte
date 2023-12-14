@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Navbar from '../../lib/navbar.svelte';
 	import Footer from '../../lib/footer.svelte';
 	import Product from '$lib/product.svelte';
@@ -27,6 +27,14 @@
 	const search_product_name = $page.url.searchParams.get('name');
 	const search_category = $page.url.searchParams.get('category');
 	const search_max = $page.url.searchParams.get('max') ?? 25;
+
+
+    import type { PageData } from './$houdini'
+    export let data: PageData
+
+    $: ({ ProductSearch } = data)
+	$: console.log("Product serach: ", $ProductSearch)
+	
 </script>
 
 <main class="w-full flex-1 px-8 flex-col justify-start items-start gap-8 inline-flex">
@@ -43,8 +51,8 @@
 
 	</div>
 	<section class="w-full products">
-		{#each Array(search_max) as _}
-			<Product />
+		{#each $ProductSearch?.data?.productCollection?.edges ?? [] as { node: product }}
+			<Product {product} />
 		{/each}
 	<section />
 	<aside>Filter here!</aside>
