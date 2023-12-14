@@ -40,6 +40,100 @@ input BooleanFilter {
   is: FilterIs
 }
 
+type Brand implements Node {
+  name: Opaque
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  productCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductOrderBy!]
+  ): ProductConnection
+  slug: String!
+}
+
+type BrandConnection {
+  edges: [BrandEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BrandDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Brand!]!
+}
+
+type BrandEdge {
+  cursor: String!
+  node: Brand!
+}
+
+input BrandFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [BrandFilter!]
+  name: OpaqueFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: BrandFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [BrandFilter!]
+  slug: StringFilter
+}
+
+input BrandInsertInput {
+  name: Opaque
+  slug: String
+}
+
+type BrandInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Brand!]!
+}
+
+input BrandOrderBy {
+  name: OrderByDirection
+  slug: OrderByDirection
+}
+
+input BrandUpdateInput {
+  name: Opaque
+  slug: String
+}
+
+type BrandUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Brand!]!
+}
+
 type Category implements Node {
   category: Category
   categoryCollection(
@@ -68,6 +162,25 @@ type Category implements Node {
   """Globally Unique Record Identifier"""
   nodeId: ID!
   parent: BigInt
+  productCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductOrderBy!]
+  ): ProductConnection
   slug: String
 }
 
@@ -266,7 +379,7 @@ type Market implements Node {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: storeFilter
+    filter: StoreFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -275,8 +388,8 @@ type Market implements Node {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [storeOrderBy!]
-  ): storeConnection
+    orderBy: [StoreOrderBy!]
+  ): StoreConnection
 }
 
 type MarketConnection {
@@ -351,6 +464,17 @@ type MarketUpdateResponse {
 
 """The root type for creating and mutating data"""
 type Mutation {
+  """Deletes zero or more records from the `Brand` collection"""
+  deleteFromBrandCollection(
+    """
+    The maximum number of records in the collection permitted to be affected
+    """
+    atMost: Int! = 1
+
+    """Restricts the mutation's impact to records matching the criteria"""
+    filter: BrandFilter
+  ): BrandDeleteResponse!
+
   """Deletes zero or more records from the `Category` collection"""
   deleteFromCategoryCollection(
     """
@@ -373,93 +497,107 @@ type Mutation {
     filter: MarketFilter
   ): MarketDeleteResponse!
 
-  """Deletes zero or more records from the `brand` collection"""
-  deleteFrombrandCollection(
+  """Deletes zero or more records from the `Notified` collection"""
+  deleteFromNotifiedCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: brandFilter
-  ): brandDeleteResponse!
+    filter: NotifiedFilter
+  ): NotifiedDeleteResponse!
 
-  """Deletes zero or more records from the `notified` collection"""
-  deleteFromnotifiedCollection(
+  """Deletes zero or more records from the `PriceDelta` collection"""
+  deleteFromPriceDeltaCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: notifiedFilter
-  ): notifiedDeleteResponse!
+    filter: PriceDeltaFilter
+  ): PriceDeltaDeleteResponse!
 
-  """Deletes zero or more records from the `product` collection"""
-  deleteFromproductCollection(
+  """Deletes zero or more records from the `Product` collection"""
+  deleteFromProductCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: productFilter
-  ): productDeleteResponse!
+    filter: ProductFilter
+  ): ProductDeleteResponse!
 
-  """Deletes zero or more records from the `product_listing` collection"""
-  deleteFromproduct_listingCollection(
+  """Deletes zero or more records from the `ProductListing` collection"""
+  deleteFromProductListingCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: product_listingFilter
-  ): product_listingDeleteResponse!
+    filter: ProductListingFilter
+  ): ProductListingDeleteResponse!
 
-  """Deletes zero or more records from the `product_pricing` collection"""
-  deleteFromproduct_pricingCollection(
+  """Deletes zero or more records from the `ProductPricing` collection"""
+  deleteFromProductPricingCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: product_pricingFilter
-  ): product_pricingDeleteResponse!
+    filter: ProductPricingFilter
+  ): ProductPricingDeleteResponse!
 
-  """Deletes zero or more records from the `product_variant` collection"""
-  deleteFromproduct_variantCollection(
+  """Deletes zero or more records from the `ProductQuantity` collection"""
+  deleteFromProductQuantityCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: product_variantFilter
-  ): product_variantDeleteResponse!
+    filter: ProductQuantityFilter
+  ): ProductQuantityDeleteResponse!
 
-  """Deletes zero or more records from the `store` collection"""
-  deleteFromstoreCollection(
+  """Deletes zero or more records from the `ProductVariant` collection"""
+  deleteFromProductVariantCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: storeFilter
-  ): storeDeleteResponse!
+    filter: ProductVariantFilter
+  ): ProductVariantDeleteResponse!
 
-  """Deletes zero or more records from the `webuser` collection"""
-  deleteFromwebuserCollection(
+  """Deletes zero or more records from the `Store` collection"""
+  deleteFromStoreCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: webuserFilter
-  ): webuserDeleteResponse!
+    filter: StoreFilter
+  ): StoreDeleteResponse!
+
+  """Deletes zero or more records from the `Webuser` collection"""
+  deleteFromWebuserCollection(
+    """
+    The maximum number of records in the collection permitted to be affected
+    """
+    atMost: Int! = 1
+
+    """Restricts the mutation's impact to records matching the criteria"""
+    filter: WebuserFilter
+  ): WebuserDeleteResponse!
+
+  """Adds one or more `Brand` records to the collection"""
+  insertIntoBrandCollection(objects: [BrandInsertInput!]!): BrandInsertResponse
 
   """Adds one or more `Category` records to the collection"""
   insertIntoCategoryCollection(objects: [CategoryInsertInput!]!): CategoryInsertResponse
@@ -467,29 +605,48 @@ type Mutation {
   """Adds one or more `Market` records to the collection"""
   insertIntoMarketCollection(objects: [MarketInsertInput!]!): MarketInsertResponse
 
-  """Adds one or more `brand` records to the collection"""
-  insertIntobrandCollection(objects: [brandInsertInput!]!): brandInsertResponse
+  """Adds one or more `Notified` records to the collection"""
+  insertIntoNotifiedCollection(objects: [NotifiedInsertInput!]!): NotifiedInsertResponse
 
-  """Adds one or more `notified` records to the collection"""
-  insertIntonotifiedCollection(objects: [notifiedInsertInput!]!): notifiedInsertResponse
+  """Adds one or more `PriceDelta` records to the collection"""
+  insertIntoPriceDeltaCollection(objects: [PriceDeltaInsertInput!]!): PriceDeltaInsertResponse
 
-  """Adds one or more `product` records to the collection"""
-  insertIntoproductCollection(objects: [productInsertInput!]!): productInsertResponse
+  """Adds one or more `Product` records to the collection"""
+  insertIntoProductCollection(objects: [ProductInsertInput!]!): ProductInsertResponse
 
-  """Adds one or more `product_listing` records to the collection"""
-  insertIntoproduct_listingCollection(objects: [product_listingInsertInput!]!): product_listingInsertResponse
+  """Adds one or more `ProductListing` records to the collection"""
+  insertIntoProductListingCollection(objects: [ProductListingInsertInput!]!): ProductListingInsertResponse
 
-  """Adds one or more `product_pricing` records to the collection"""
-  insertIntoproduct_pricingCollection(objects: [product_pricingInsertInput!]!): product_pricingInsertResponse
+  """Adds one or more `ProductPricing` records to the collection"""
+  insertIntoProductPricingCollection(objects: [ProductPricingInsertInput!]!): ProductPricingInsertResponse
 
-  """Adds one or more `product_variant` records to the collection"""
-  insertIntoproduct_variantCollection(objects: [product_variantInsertInput!]!): product_variantInsertResponse
+  """Adds one or more `ProductQuantity` records to the collection"""
+  insertIntoProductQuantityCollection(objects: [ProductQuantityInsertInput!]!): ProductQuantityInsertResponse
 
-  """Adds one or more `store` records to the collection"""
-  insertIntostoreCollection(objects: [storeInsertInput!]!): storeInsertResponse
+  """Adds one or more `ProductVariant` records to the collection"""
+  insertIntoProductVariantCollection(objects: [ProductVariantInsertInput!]!): ProductVariantInsertResponse
 
-  """Adds one or more `webuser` records to the collection"""
-  insertIntowebuserCollection(objects: [webuserInsertInput!]!): webuserInsertResponse
+  """Adds one or more `Store` records to the collection"""
+  insertIntoStoreCollection(objects: [StoreInsertInput!]!): StoreInsertResponse
+
+  """Adds one or more `Webuser` records to the collection"""
+  insertIntoWebuserCollection(objects: [WebuserInsertInput!]!): WebuserInsertResponse
+
+  """Updates zero or more records in the `Brand` collection"""
+  updateBrandCollection(
+    """
+    The maximum number of records in the collection permitted to be affected
+    """
+    atMost: Int! = 1
+
+    """Restricts the mutation's impact to records matching the criteria"""
+    filter: BrandFilter
+
+    """
+    Fields that are set will be updated for all records matching the `filter`
+    """
+    set: BrandUpdateInput!
+  ): BrandUpdateResponse!
 
   """Updates zero or more records in the `Category` collection"""
   updateCategoryCollection(
@@ -523,138 +680,231 @@ type Mutation {
     set: MarketUpdateInput!
   ): MarketUpdateResponse!
 
-  """Updates zero or more records in the `brand` collection"""
-  updatebrandCollection(
+  """Updates zero or more records in the `Notified` collection"""
+  updateNotifiedCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: brandFilter
+    filter: NotifiedFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: brandUpdateInput!
-  ): brandUpdateResponse!
+    set: NotifiedUpdateInput!
+  ): NotifiedUpdateResponse!
 
-  """Updates zero or more records in the `notified` collection"""
-  updatenotifiedCollection(
+  """Updates zero or more records in the `PriceDelta` collection"""
+  updatePriceDeltaCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: notifiedFilter
+    filter: PriceDeltaFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: notifiedUpdateInput!
-  ): notifiedUpdateResponse!
+    set: PriceDeltaUpdateInput!
+  ): PriceDeltaUpdateResponse!
 
-  """Updates zero or more records in the `product` collection"""
-  updateproductCollection(
+  """Updates zero or more records in the `Product` collection"""
+  updateProductCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: productFilter
+    filter: ProductFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: productUpdateInput!
-  ): productUpdateResponse!
+    set: ProductUpdateInput!
+  ): ProductUpdateResponse!
 
-  """Updates zero or more records in the `product_listing` collection"""
-  updateproduct_listingCollection(
+  """Updates zero or more records in the `ProductListing` collection"""
+  updateProductListingCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: product_listingFilter
+    filter: ProductListingFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: product_listingUpdateInput!
-  ): product_listingUpdateResponse!
+    set: ProductListingUpdateInput!
+  ): ProductListingUpdateResponse!
 
-  """Updates zero or more records in the `product_pricing` collection"""
-  updateproduct_pricingCollection(
+  """Updates zero or more records in the `ProductPricing` collection"""
+  updateProductPricingCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: product_pricingFilter
+    filter: ProductPricingFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: product_pricingUpdateInput!
-  ): product_pricingUpdateResponse!
+    set: ProductPricingUpdateInput!
+  ): ProductPricingUpdateResponse!
 
-  """Updates zero or more records in the `product_variant` collection"""
-  updateproduct_variantCollection(
+  """Updates zero or more records in the `ProductQuantity` collection"""
+  updateProductQuantityCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: product_variantFilter
+    filter: ProductQuantityFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: product_variantUpdateInput!
-  ): product_variantUpdateResponse!
+    set: ProductQuantityUpdateInput!
+  ): ProductQuantityUpdateResponse!
 
-  """Updates zero or more records in the `store` collection"""
-  updatestoreCollection(
+  """Updates zero or more records in the `ProductVariant` collection"""
+  updateProductVariantCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: storeFilter
+    filter: ProductVariantFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: storeUpdateInput!
-  ): storeUpdateResponse!
+    set: ProductVariantUpdateInput!
+  ): ProductVariantUpdateResponse!
 
-  """Updates zero or more records in the `webuser` collection"""
-  updatewebuserCollection(
+  """Updates zero or more records in the `Store` collection"""
+  updateStoreCollection(
     """
     The maximum number of records in the collection permitted to be affected
     """
     atMost: Int! = 1
 
     """Restricts the mutation's impact to records matching the criteria"""
-    filter: webuserFilter
+    filter: StoreFilter
 
     """
     Fields that are set will be updated for all records matching the `filter`
     """
-    set: webuserUpdateInput!
-  ): webuserUpdateResponse!
+    set: StoreUpdateInput!
+  ): StoreUpdateResponse!
+
+  """Updates zero or more records in the `Webuser` collection"""
+  updateWebuserCollection(
+    """
+    The maximum number of records in the collection permitted to be affected
+    """
+    atMost: Int! = 1
+
+    """Restricts the mutation's impact to records matching the criteria"""
+    filter: WebuserFilter
+
+    """
+    Fields that are set will be updated for all records matching the `filter`
+    """
+    set: WebuserUpdateInput!
+  ): WebuserUpdateResponse!
 }
 
 interface Node {
   """Retrieves a record by `ID`"""
   nodeId: ID!
+}
+
+type Notified implements Node {
+  cookie: Webuser!
+  cookieId: String!
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  var: ProductVariant!
+  varId: Int!
+}
+
+type NotifiedConnection {
+  edges: [NotifiedEdge!]!
+  pageInfo: PageInfo!
+}
+
+type NotifiedDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Notified!]!
+}
+
+type NotifiedEdge {
+  cursor: String!
+  node: Notified!
+}
+
+input NotifiedFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [NotifiedFilter!]
+  cookieId: StringFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: NotifiedFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [NotifiedFilter!]
+  varId: IntFilter
+}
+
+input NotifiedInsertInput {
+  cookieId: String
+  varId: Int
+}
+
+type NotifiedInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Notified!]!
+}
+
+input NotifiedOrderBy {
+  cookieId: OrderByDirection
+  varId: OrderByDirection
+}
+
+input NotifiedUpdateInput {
+  cookieId: String
+  varId: Int
+}
+
+type NotifiedUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Notified!]!
 }
 
 """Any type not handled by the type system"""
@@ -690,10 +940,107 @@ type PageInfo {
   startCursor: String
 }
 
-"""The root type for querying data"""
-type Query {
-  """A pagable collection of type `brand`"""
-  brandCollection(
+type PriceDelta implements Node {
+  currency: String
+  delta: BigFloat
+  listing: Int
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  price: BigFloat
+  productListing: ProductListing
+  scrapedAt: Datetime
+}
+
+type PriceDeltaConnection {
+  edges: [PriceDeltaEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PriceDeltaDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [PriceDelta!]!
+}
+
+type PriceDeltaEdge {
+  cursor: String!
+  node: PriceDelta!
+}
+
+input PriceDeltaFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [PriceDeltaFilter!]
+  currency: StringFilter
+  delta: BigFloatFilter
+  listing: IntFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: PriceDeltaFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [PriceDeltaFilter!]
+  price: BigFloatFilter
+  scrapedAt: DatetimeFilter
+}
+
+input PriceDeltaInsertInput {
+  currency: String
+  delta: BigFloat
+  listing: Int
+  price: BigFloat
+  scrapedAt: Datetime
+}
+
+type PriceDeltaInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [PriceDelta!]!
+}
+
+input PriceDeltaOrderBy {
+  currency: OrderByDirection
+  delta: OrderByDirection
+  listing: OrderByDirection
+  price: OrderByDirection
+  scrapedAt: OrderByDirection
+}
+
+input PriceDeltaUpdateInput {
+  currency: String
+  delta: BigFloat
+  listing: Int
+  price: BigFloat
+  scrapedAt: Datetime
+}
+
+type PriceDeltaUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [PriceDelta!]!
+}
+
+type Product implements Node {
+  brand: Brand!
+  category: Category
+  img: String
+  name: Opaque!
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  pnameSlug: String!
+  productQuantityCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
 
@@ -701,7 +1048,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: brandFilter
+    filter: ProductQuantityFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -710,8 +1057,579 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [brandOrderBy!]
-  ): brandConnection
+    orderBy: [ProductQuantityOrderBy!]
+  ): ProductQuantityConnection
+  productVariantCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductVariantFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductVariantOrderBy!]
+  ): ProductVariantConnection
+}
+
+type ProductConnection {
+  edges: [ProductEdge!]!
+  pageInfo: PageInfo!
+
+  """The total number of records matching the `filter` criteria"""
+  totalCount: Int!
+}
+
+type ProductDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Product!]!
+}
+
+type ProductEdge {
+  cursor: String!
+  node: Product!
+}
+
+input ProductFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [ProductFilter!]
+  brand: StringFilter
+  category: BigIntFilter
+  img: StringFilter
+  name: OpaqueFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: ProductFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [ProductFilter!]
+  pnameSlug: StringFilter
+}
+
+input ProductInsertInput {
+  brand: String
+  category: BigInt
+  img: String
+  name: Opaque
+  pnameSlug: String
+}
+
+type ProductInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Product!]!
+}
+
+type ProductListing implements Node {
+  listingId: Int!
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  priceDeltaCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: PriceDeltaFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [PriceDeltaOrderBy!]
+  ): PriceDeltaConnection
+  productPricingCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductPricingFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductPricingOrderBy!]
+  ): ProductPricingConnection
+  productQuantity: ProductQuantity
+  productVariant: ProductVariant!
+  quantity: BigInt
+  store: Store!
+  url: String
+  variant: Int!
+}
+
+type ProductListingConnection {
+  edges: [ProductListingEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProductListingDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductListing!]!
+}
+
+type ProductListingEdge {
+  cursor: String!
+  node: ProductListing!
+}
+
+input ProductListingFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [ProductListingFilter!]
+  listingId: IntFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: ProductListingFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [ProductListingFilter!]
+  quantity: BigIntFilter
+  store: StringFilter
+  url: StringFilter
+  variant: IntFilter
+}
+
+input ProductListingInsertInput {
+  listingId: Int
+  quantity: BigInt
+  store: String
+  url: String
+  variant: Int
+}
+
+type ProductListingInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductListing!]!
+}
+
+input ProductListingOrderBy {
+  listingId: OrderByDirection
+  quantity: OrderByDirection
+  store: OrderByDirection
+  url: OrderByDirection
+  variant: OrderByDirection
+}
+
+input ProductListingUpdateInput {
+  listingId: Int
+  quantity: BigInt
+  store: String
+  url: String
+  variant: Int
+}
+
+type ProductListingUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductListing!]!
+}
+
+input ProductOrderBy {
+  brand: OrderByDirection
+  category: OrderByDirection
+  img: OrderByDirection
+  name: OrderByDirection
+  pnameSlug: OrderByDirection
+}
+
+type ProductPricing implements Node {
+  currency: String!
+  listing: Int!
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  price: BigFloat!
+  productListing: ProductListing!
+  scrapedAt: Datetime!
+}
+
+type ProductPricingConnection {
+  edges: [ProductPricingEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProductPricingDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductPricing!]!
+}
+
+type ProductPricingEdge {
+  cursor: String!
+  node: ProductPricing!
+}
+
+input ProductPricingFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [ProductPricingFilter!]
+  currency: StringFilter
+  listing: IntFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: ProductPricingFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [ProductPricingFilter!]
+  price: BigFloatFilter
+  scrapedAt: DatetimeFilter
+}
+
+input ProductPricingInsertInput {
+  currency: String
+  listing: Int
+  price: BigFloat
+  scrapedAt: Datetime
+}
+
+type ProductPricingInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductPricing!]!
+}
+
+input ProductPricingOrderBy {
+  currency: OrderByDirection
+  listing: OrderByDirection
+  price: OrderByDirection
+  scrapedAt: OrderByDirection
+}
+
+input ProductPricingUpdateInput {
+  currency: String
+  listing: Int
+  price: BigFloat
+  scrapedAt: Datetime
+}
+
+type ProductPricingUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductPricing!]!
+}
+
+type ProductQuantity implements Node {
+  count: Int
+  id: BigInt!
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  product: Product
+  productListingCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductListingFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductListingOrderBy!]
+  ): ProductListingConnection
+  quantity: BigFloat
+  unit: Unit
+}
+
+type ProductQuantityConnection {
+  edges: [ProductQuantityEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProductQuantityDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductQuantity!]!
+}
+
+type ProductQuantityEdge {
+  cursor: String!
+  node: ProductQuantity!
+}
+
+input ProductQuantityFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [ProductQuantityFilter!]
+  count: IntFilter
+  id: BigIntFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: ProductQuantityFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [ProductQuantityFilter!]
+  product: StringFilter
+  quantity: BigFloatFilter
+  unit: UnitFilter
+}
+
+input ProductQuantityInsertInput {
+  count: Int
+  product: String
+  quantity: BigFloat
+  unit: Unit
+}
+
+type ProductQuantityInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductQuantity!]!
+}
+
+input ProductQuantityOrderBy {
+  count: OrderByDirection
+  id: OrderByDirection
+  product: OrderByDirection
+  quantity: OrderByDirection
+  unit: OrderByDirection
+}
+
+input ProductQuantityUpdateInput {
+  count: Int
+  product: String
+  quantity: BigFloat
+  unit: Unit
+}
+
+type ProductQuantityUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductQuantity!]!
+}
+
+input ProductUpdateInput {
+  brand: String
+  category: BigInt
+  img: String
+  name: Opaque
+  pnameSlug: String
+}
+
+type ProductUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Product!]!
+}
+
+type ProductVariant implements Node {
+  name: Opaque
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  notifiedCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: NotifiedFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [NotifiedOrderBy!]
+  ): NotifiedConnection!
+  product: Product!
+  productListingCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductListingFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductListingOrderBy!]
+  ): ProductListingConnection
+  slug: String!
+  varId: Int!
+}
+
+type ProductVariantConnection {
+  edges: [ProductVariantEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProductVariantDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductVariant!]!
+}
+
+type ProductVariantEdge {
+  cursor: String!
+  node: ProductVariant!
+}
+
+input ProductVariantFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [ProductVariantFilter!]
+  name: OpaqueFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: ProductVariantFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [ProductVariantFilter!]
+  product: StringFilter
+  slug: StringFilter
+  varId: IntFilter
+}
+
+input ProductVariantInsertInput {
+  name: Opaque
+  product: String
+  slug: String
+  varId: Int
+}
+
+type ProductVariantInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductVariant!]!
+}
+
+input ProductVariantOrderBy {
+  name: OrderByDirection
+  product: OrderByDirection
+  slug: OrderByDirection
+  varId: OrderByDirection
+}
+
+input ProductVariantUpdateInput {
+  name: Opaque
+  product: String
+  slug: String
+  varId: Int
+}
+
+type ProductVariantUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [ProductVariant!]!
+}
+
+"""The root type for querying data"""
+type Query {
+  """A pagable collection of type `Brand`"""
+  brandCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: BrandFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [BrandOrderBy!]
+  ): BrandConnection
 
   """A pagable collection of type `Category`"""
   categoryCollection(
@@ -761,7 +1679,7 @@ type Query {
     nodeId: ID!
   ): Node
 
-  """A pagable collection of type `notified`"""
+  """A pagable collection of type `Notified`"""
   notifiedCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
@@ -770,7 +1688,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: notifiedFilter
+    filter: NotifiedFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -779,10 +1697,31 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [notifiedOrderBy!]
-  ): notifiedConnection
+    orderBy: [NotifiedOrderBy!]
+  ): NotifiedConnection
 
-  """A pagable collection of type `product`"""
+  """A pagable collection of type `PriceDelta`"""
+  priceDeltaCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: PriceDeltaFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [PriceDeltaOrderBy!]
+  ): PriceDeltaConnection
+
+  """A pagable collection of type `Product`"""
   productCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
@@ -791,7 +1730,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: productFilter
+    filter: ProductFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -800,11 +1739,11 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [productOrderBy!]
-  ): productConnection
+    orderBy: [ProductOrderBy!]
+  ): ProductConnection
 
-  """A pagable collection of type `product_listing`"""
-  product_listingCollection(
+  """A pagable collection of type `ProductListing`"""
+  productListingCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
 
@@ -812,7 +1751,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: product_listingFilter
+    filter: ProductListingFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -821,11 +1760,12 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [product_listingOrderBy!]
-  ): product_listingConnection
+    orderBy: [ProductListingOrderBy!]
+  ): ProductListingConnection
+  productListingPrice(listingId: BigInt): ProductPricing
 
-  """A pagable collection of type `product_pricing`"""
-  product_pricingCollection(
+  """A pagable collection of type `ProductPricing`"""
+  productPricingCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
 
@@ -833,7 +1773,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: product_pricingFilter
+    filter: ProductPricingFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -842,11 +1782,11 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [product_pricingOrderBy!]
-  ): product_pricingConnection
+    orderBy: [ProductPricingOrderBy!]
+  ): ProductPricingConnection
 
-  """A pagable collection of type `product_variant`"""
-  product_variantCollection(
+  """A pagable collection of type `ProductQuantity`"""
+  productQuantityCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
 
@@ -854,7 +1794,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: product_variantFilter
+    filter: ProductQuantityFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -863,10 +1803,31 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [product_variantOrderBy!]
-  ): product_variantConnection
+    orderBy: [ProductQuantityOrderBy!]
+  ): ProductQuantityConnection
 
-  """A pagable collection of type `store`"""
+  """A pagable collection of type `ProductVariant`"""
+  productVariantCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductVariantFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductVariantOrderBy!]
+  ): ProductVariantConnection
+
+  """A pagable collection of type `Store`"""
   storeCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
@@ -875,7 +1836,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: storeFilter
+    filter: StoreFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -884,10 +1845,10 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [storeOrderBy!]
-  ): storeConnection
+    orderBy: [StoreOrderBy!]
+  ): StoreConnection
 
-  """A pagable collection of type `webuser`"""
+  """A pagable collection of type `Webuser`"""
   webuserCollection(
     """Query values in the collection after the provided cursor"""
     after: Cursor
@@ -896,7 +1857,7 @@ type Query {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: webuserFilter
+    filter: WebuserFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -905,8 +1866,122 @@ type Query {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [webuserOrderBy!]
-  ): webuserConnection
+    orderBy: [WebuserOrderBy!]
+  ): WebuserConnection
+}
+
+type Store implements Node {
+  country: String!
+  market: Market!
+  marketnameSlug: String!
+  name: Opaque!
+
+  """Globally Unique Record Identifier"""
+  nodeId: ID!
+  productListingCollection(
+    """Query values in the collection after the provided cursor"""
+    after: Cursor
+
+    """Query values in the collection before the provided cursor"""
+    before: Cursor
+
+    """Filters to apply to the results set when querying from the collection"""
+    filter: ProductListingFilter
+
+    """Query the first `n` records in the collection"""
+    first: Int
+
+    """Query the last `n` records in the collection"""
+    last: Int
+
+    """Sort order to apply to the collection"""
+    orderBy: [ProductListingOrderBy!]
+  ): ProductListingConnection
+  region: String
+  website: String
+}
+
+type StoreConnection {
+  edges: [StoreEdge!]!
+  pageInfo: PageInfo!
+}
+
+type StoreDeleteResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Store!]!
+}
+
+type StoreEdge {
+  cursor: String!
+  node: Store!
+}
+
+input StoreFilter {
+  """
+  Returns true only if all its inner filters are true, otherwise returns false
+  """
+  and: [StoreFilter!]
+  country: StringFilter
+  market: StringFilter
+  marketnameSlug: StringFilter
+  name: OpaqueFilter
+  nodeId: IDFilter
+
+  """Negates a filter"""
+  not: StoreFilter
+
+  """
+  Returns true if at least one of its inner filters is true, otherwise returns false
+  """
+  or: [StoreFilter!]
+  region: StringFilter
+  website: StringFilter
+}
+
+input StoreInsertInput {
+  country: String
+  market: String
+  marketnameSlug: String
+  name: Opaque
+  region: String
+  website: String
+}
+
+type StoreInsertResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Store!]!
+}
+
+input StoreOrderBy {
+  country: OrderByDirection
+  market: OrderByDirection
+  marketnameSlug: OrderByDirection
+  name: OrderByDirection
+  region: OrderByDirection
+  website: OrderByDirection
+}
+
+input StoreUpdateInput {
+  country: String
+  market: String
+  marketnameSlug: String
+  name: Opaque
+  region: String
+  website: String
+}
+
+type StoreUpdateResponse {
+  """Count of the records impacted by the mutation"""
+  affectedCount: Int!
+
+  """Array of records impacted by the mutation"""
+  records: [Store!]!
 }
 
 """
@@ -958,724 +2033,67 @@ input UUIDFilter {
   neq: UUID
 }
 
-type brand implements Node {
-  bname_slug: String!
-  name: Opaque
-
-  """Globally Unique Record Identifier"""
-  nodeId: ID!
-  productCollection(
-    """Query values in the collection after the provided cursor"""
-    after: Cursor
-
-    """Query values in the collection before the provided cursor"""
-    before: Cursor
-
-    """Filters to apply to the results set when querying from the collection"""
-    filter: productFilter
-
-    """Query the first `n` records in the collection"""
-    first: Int
-
-    """Query the last `n` records in the collection"""
-    last: Int
-
-    """Sort order to apply to the collection"""
-    orderBy: [productOrderBy!]
-  ): productConnection
-}
-
-type brandConnection {
-  edges: [brandEdge!]!
-  pageInfo: PageInfo!
-}
-
-type brandDeleteResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [brand!]!
-}
-
-type brandEdge {
-  cursor: String!
-  node: brand!
-}
-
-input brandFilter {
-  """
-  Returns true only if all its inner filters are true, otherwise returns false
-  """
-  and: [brandFilter!]
-  bname_slug: StringFilter
-  name: OpaqueFilter
-  nodeId: IDFilter
-
-  """Negates a filter"""
-  not: brandFilter
-
-  """
-  Returns true if at least one of its inner filters is true, otherwise returns false
-  """
-  or: [brandFilter!]
-}
-
-input brandInsertInput {
-  bname_slug: String
-  name: Opaque
-}
-
-type brandInsertResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [brand!]!
-}
-
-input brandOrderBy {
-  bname_slug: OrderByDirection
-  name: OrderByDirection
-}
-
-input brandUpdateInput {
-  bname_slug: String
-  name: Opaque
-}
-
-type brandUpdateResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [brand!]!
-}
-
-type notified implements Node {
-  cookie_id: String!
-
-  """Globally Unique Record Identifier"""
-  nodeId: ID!
-  product_variant: product_variant!
-  var_id: Int!
-  webuser: webuser!
-}
-
-type notifiedConnection {
-  edges: [notifiedEdge!]!
-  pageInfo: PageInfo!
-}
-
-type notifiedDeleteResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [notified!]!
-}
-
-type notifiedEdge {
-  cursor: String!
-  node: notified!
-}
-
-input notifiedFilter {
-  """
-  Returns true only if all its inner filters are true, otherwise returns false
-  """
-  and: [notifiedFilter!]
-  cookie_id: StringFilter
-  nodeId: IDFilter
-
-  """Negates a filter"""
-  not: notifiedFilter
-
-  """
-  Returns true if at least one of its inner filters is true, otherwise returns false
-  """
-  or: [notifiedFilter!]
-  var_id: IntFilter
-}
-
-input notifiedInsertInput {
-  cookie_id: String
-  var_id: Int
-}
-
-type notifiedInsertResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [notified!]!
-}
-
-input notifiedOrderBy {
-  cookie_id: OrderByDirection
-  var_id: OrderByDirection
-}
-
-input notifiedUpdateInput {
-  cookie_id: String
-  var_id: Int
-}
-
-type notifiedUpdateResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [notified!]!
-}
-
-type product implements Node {
-  bname: String!
-  brand: brand!
-  img: String
-  name: Opaque!
-
-  """Globally Unique Record Identifier"""
-  nodeId: ID!
-  pname_slug: String!
-  product_variantCollection(
-    """Query values in the collection after the provided cursor"""
-    after: Cursor
-
-    """Query values in the collection before the provided cursor"""
-    before: Cursor
-
-    """Filters to apply to the results set when querying from the collection"""
-    filter: product_variantFilter
-
-    """Query the first `n` records in the collection"""
-    first: Int
-
-    """Query the last `n` records in the collection"""
-    last: Int
-
-    """Sort order to apply to the collection"""
-    orderBy: [product_variantOrderBy!]
-  ): product_variantConnection
-}
-
-type productConnection {
-  edges: [productEdge!]!
-  pageInfo: PageInfo!
-}
-
-type productDeleteResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product!]!
-}
-
-type productEdge {
-  cursor: String!
-  node: product!
-}
-
-input productFilter {
-  """
-  Returns true only if all its inner filters are true, otherwise returns false
-  """
-  and: [productFilter!]
-  bname: StringFilter
-  img: StringFilter
-  name: OpaqueFilter
-  nodeId: IDFilter
-
-  """Negates a filter"""
-  not: productFilter
-
-  """
-  Returns true if at least one of its inner filters is true, otherwise returns false
-  """
-  or: [productFilter!]
-  pname_slug: StringFilter
-}
-
-input productInsertInput {
-  bname: String
-  img: String
-  name: Opaque
-  pname_slug: String
-}
-
-type productInsertResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product!]!
-}
-
-input productOrderBy {
-  bname: OrderByDirection
-  img: OrderByDirection
-  name: OrderByDirection
-  pname_slug: OrderByDirection
-}
-
-input productUpdateInput {
-  bname: String
-  img: String
-  name: Opaque
-  pname_slug: String
-}
-
-type productUpdateResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product!]!
-}
-
-type product_listing implements Node {
-  listing_id: Int!
-  marketname: String!
-
-  """Globally Unique Record Identifier"""
-  nodeId: ID!
-  product_pricingCollection(
-    """Query values in the collection after the provided cursor"""
-    after: Cursor
-
-    """Query values in the collection before the provided cursor"""
-    before: Cursor
-
-    """Filters to apply to the results set when querying from the collection"""
-    filter: product_pricingFilter
-
-    """Query the first `n` records in the collection"""
-    first: Int
-
-    """Query the last `n` records in the collection"""
-    last: Int
-
-    """Sort order to apply to the collection"""
-    orderBy: [product_pricingOrderBy!]
-  ): product_pricingConnection!
-  product_variant: product_variant!
-  store: store!
-  url: String
-  varid: Int!
-}
-
-type product_listingConnection {
-  edges: [product_listingEdge!]!
-  pageInfo: PageInfo!
-}
-
-type product_listingDeleteResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_listing!]!
-}
-
-type product_listingEdge {
-  cursor: String!
-  node: product_listing!
-}
-
-input product_listingFilter {
-  """
-  Returns true only if all its inner filters are true, otherwise returns false
-  """
-  and: [product_listingFilter!]
-  listing_id: IntFilter
-  marketname: StringFilter
-  nodeId: IDFilter
-
-  """Negates a filter"""
-  not: product_listingFilter
-
-  """
-  Returns true if at least one of its inner filters is true, otherwise returns false
-  """
-  or: [product_listingFilter!]
-  url: StringFilter
-  varid: IntFilter
-}
-
-input product_listingInsertInput {
-  listing_id: Int
-  marketname: String
-  url: String
-  varid: Int
-}
-
-type product_listingInsertResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_listing!]!
-}
-
-input product_listingOrderBy {
-  listing_id: OrderByDirection
-  marketname: OrderByDirection
-  url: OrderByDirection
-  varid: OrderByDirection
-}
-
-input product_listingUpdateInput {
-  listing_id: Int
-  marketname: String
-  url: String
-  varid: Int
-}
-
-type product_listingUpdateResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_listing!]!
-}
-
-type product_pricing implements Node {
-  currency: String!
-  listing_id: Int!
-
-  """Globally Unique Record Identifier"""
-  nodeId: ID!
-  price: Int!
-  pricing_date: Date!
-  product_listing: product_listing!
-}
-
-type product_pricingConnection {
-  edges: [product_pricingEdge!]!
-  pageInfo: PageInfo!
-}
-
-type product_pricingDeleteResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_pricing!]!
-}
-
-type product_pricingEdge {
-  cursor: String!
-  node: product_pricing!
-}
-
-input product_pricingFilter {
-  """
-  Returns true only if all its inner filters are true, otherwise returns false
-  """
-  and: [product_pricingFilter!]
-  currency: StringFilter
-  listing_id: IntFilter
-  nodeId: IDFilter
-
-  """Negates a filter"""
-  not: product_pricingFilter
-
-  """
-  Returns true if at least one of its inner filters is true, otherwise returns false
-  """
-  or: [product_pricingFilter!]
-  price: IntFilter
-  pricing_date: DateFilter
-}
-
-input product_pricingInsertInput {
-  currency: String
-  listing_id: Int
-  price: Int
-  pricing_date: Date
-}
-
-type product_pricingInsertResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_pricing!]!
-}
-
-input product_pricingOrderBy {
-  currency: OrderByDirection
-  listing_id: OrderByDirection
-  price: OrderByDirection
-  pricing_date: OrderByDirection
-}
-
-input product_pricingUpdateInput {
-  currency: String
-  listing_id: Int
-  price: Int
-  pricing_date: Date
-}
-
-type product_pricingUpdateResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_pricing!]!
-}
-
-type product_variant implements Node {
-  """Globally Unique Record Identifier"""
-  nodeId: ID!
-  notifiedCollection(
-    """Query values in the collection after the provided cursor"""
-    after: Cursor
-
-    """Query values in the collection before the provided cursor"""
-    before: Cursor
-
-    """Filters to apply to the results set when querying from the collection"""
-    filter: notifiedFilter
-
-    """Query the first `n` records in the collection"""
-    first: Int
-
-    """Query the last `n` records in the collection"""
-    last: Int
-
-    """Sort order to apply to the collection"""
-    orderBy: [notifiedOrderBy!]
-  ): notifiedConnection!
-  product: product!
-  product_listingCollection(
-    """Query values in the collection after the provided cursor"""
-    after: Cursor
-
-    """Query values in the collection before the provided cursor"""
-    before: Cursor
-
-    """Filters to apply to the results set when querying from the collection"""
-    filter: product_listingFilter
-
-    """Query the first `n` records in the collection"""
-    first: Int
-
-    """Query the last `n` records in the collection"""
-    last: Int
-
-    """Sort order to apply to the collection"""
-    orderBy: [product_listingOrderBy!]
-  ): product_listingConnection
-  product_slug: String!
-  quantity: Float
-  quantity_pcs: Int
-  quantity_unit: String
-  var_id: Int!
-  variant_slug: String!
-}
-
-type product_variantConnection {
-  edges: [product_variantEdge!]!
-  pageInfo: PageInfo!
-}
-
-type product_variantDeleteResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_variant!]!
-}
-
-type product_variantEdge {
-  cursor: String!
-  node: product_variant!
-}
-
-input product_variantFilter {
-  """
-  Returns true only if all its inner filters are true, otherwise returns false
-  """
-  and: [product_variantFilter!]
-  nodeId: IDFilter
-
-  """Negates a filter"""
-  not: product_variantFilter
-
-  """
-  Returns true if at least one of its inner filters is true, otherwise returns false
-  """
-  or: [product_variantFilter!]
-  product_slug: StringFilter
-  quantity: FloatFilter
-  quantity_pcs: IntFilter
-  quantity_unit: StringFilter
-  var_id: IntFilter
-  variant_slug: StringFilter
-}
-
-input product_variantInsertInput {
-  product_slug: String
-  quantity: Float
-  quantity_pcs: Int
-  quantity_unit: String
-  var_id: Int
-  variant_slug: String
-}
-
-type product_variantInsertResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_variant!]!
-}
-
-input product_variantOrderBy {
-  product_slug: OrderByDirection
-  quantity: OrderByDirection
-  quantity_pcs: OrderByDirection
-  quantity_unit: OrderByDirection
-  var_id: OrderByDirection
-  variant_slug: OrderByDirection
-}
-
-input product_variantUpdateInput {
-  product_slug: String
-  quantity: Float
-  quantity_pcs: Int
-  quantity_unit: String
-  var_id: Int
-  variant_slug: String
-}
-
-type product_variantUpdateResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [product_variant!]!
-}
-
-type store implements Node {
-  country: String!
-  market: Market!
-  marketname_slug: String!
-  name: Opaque!
-
-  """Globally Unique Record Identifier"""
-  nodeId: ID!
-  product_listingCollection(
-    """Query values in the collection after the provided cursor"""
-    after: Cursor
-
-    """Query values in the collection before the provided cursor"""
-    before: Cursor
-
-    """Filters to apply to the results set when querying from the collection"""
-    filter: product_listingFilter
-
-    """Query the first `n` records in the collection"""
-    first: Int
-
-    """Query the last `n` records in the collection"""
-    last: Int
-
-    """Sort order to apply to the collection"""
-    orderBy: [product_listingOrderBy!]
-  ): product_listingConnection
-  region: String
-  website: String
-}
-
-type storeConnection {
-  edges: [storeEdge!]!
-  pageInfo: PageInfo!
-}
-
-type storeDeleteResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [store!]!
-}
-
-type storeEdge {
-  cursor: String!
-  node: store!
-}
-
-input storeFilter {
-  """
-  Returns true only if all its inner filters are true, otherwise returns false
-  """
-  and: [storeFilter!]
-  country: StringFilter
-  market: StringFilter
-  marketname_slug: StringFilter
-  name: OpaqueFilter
-  nodeId: IDFilter
-
-  """Negates a filter"""
-  not: storeFilter
-
-  """
-  Returns true if at least one of its inner filters is true, otherwise returns false
-  """
-  or: [storeFilter!]
-  region: StringFilter
-  website: StringFilter
-}
-
-input storeInsertInput {
-  country: String
-  market: String
-  marketname_slug: String
-  name: Opaque
-  region: String
-  website: String
-}
-
-type storeInsertResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [store!]!
-}
-
-input storeOrderBy {
-  country: OrderByDirection
-  market: OrderByDirection
-  marketname_slug: OrderByDirection
-  name: OrderByDirection
-  region: OrderByDirection
-  website: OrderByDirection
-}
-
-input storeUpdateInput {
-  country: String
-  market: String
-  marketname_slug: String
-  name: Opaque
-  region: String
-  website: String
-}
-
-type storeUpdateResponse {
-  """Count of the records impacted by the mutation"""
-  affectedCount: Int!
-
-  """Array of records impacted by the mutation"""
-  records: [store!]!
-}
-
-type webuser implements Node {
+enum Unit {
+  acre
+  bit
+  byte
+  celsius
+  centimeter
+  day
+  degree
+  fahrenheit
+  fluid_ounce
+  foot
+  gallon
+  gigabit
+  gigabyte
+  gram
+  hectare
+  hour
+  inch
+  kilobit
+  kilobyte
+  kilogram
+  kilometer
+  liter
+  megabit
+  megabyte
+  meter
+  microsecond
+  mile
+  mile_scandinavian
+  milliliter
+  millimeter
+  millisecond
+  minute
+  month
+  nanosecond
+  ounce
+  percent
+  petabyte
+  pound
+  second
+  stone
+  terabit
+  terabyte
+  week
+  yard
+  year
+}
+
+"""
+Boolean expression comparing fields on type "Unit"
+"""
+input UnitFilter {
+  eq: Unit
+  in: [Unit!]
+  is: FilterIs
+  neq: Unit
+}
+
+type Webuser implements Node {
   auth: String!
-  cookie_id: String!
+  cookieId: String!
   encodedVap: [BigInt]
 
   """Globally Unique Record Identifier"""
@@ -1688,7 +2106,7 @@ type webuser implements Node {
     before: Cursor
 
     """Filters to apply to the results set when querying from the collection"""
-    filter: notifiedFilter
+    filter: NotifiedFilter
 
     """Query the first `n` records in the collection"""
     first: Int
@@ -1697,80 +2115,80 @@ type webuser implements Node {
     last: Int
 
     """Sort order to apply to the collection"""
-    orderBy: [notifiedOrderBy!]
-  ): notifiedConnection!
+    orderBy: [NotifiedOrderBy!]
+  ): NotifiedConnection!
   p256dh: String!
 }
 
-type webuserConnection {
-  edges: [webuserEdge!]!
+type WebuserConnection {
+  edges: [WebuserEdge!]!
   pageInfo: PageInfo!
 }
 
-type webuserDeleteResponse {
+type WebuserDeleteResponse {
   """Count of the records impacted by the mutation"""
   affectedCount: Int!
 
   """Array of records impacted by the mutation"""
-  records: [webuser!]!
+  records: [Webuser!]!
 }
 
-type webuserEdge {
+type WebuserEdge {
   cursor: String!
-  node: webuser!
+  node: Webuser!
 }
 
-input webuserFilter {
+input WebuserFilter {
   """
   Returns true only if all its inner filters are true, otherwise returns false
   """
-  and: [webuserFilter!]
+  and: [WebuserFilter!]
   auth: StringFilter
-  cookie_id: StringFilter
+  cookieId: StringFilter
   nodeId: IDFilter
 
   """Negates a filter"""
-  not: webuserFilter
+  not: WebuserFilter
 
   """
   Returns true if at least one of its inner filters is true, otherwise returns false
   """
-  or: [webuserFilter!]
+  or: [WebuserFilter!]
   p256dh: StringFilter
 }
 
-input webuserInsertInput {
+input WebuserInsertInput {
   auth: String
-  cookie_id: String
+  cookieId: String
   encodedVap: [BigInt]
   p256dh: String
 }
 
-type webuserInsertResponse {
+type WebuserInsertResponse {
   """Count of the records impacted by the mutation"""
   affectedCount: Int!
 
   """Array of records impacted by the mutation"""
-  records: [webuser!]!
+  records: [Webuser!]!
 }
 
-input webuserOrderBy {
+input WebuserOrderBy {
   auth: OrderByDirection
-  cookie_id: OrderByDirection
+  cookieId: OrderByDirection
   p256dh: OrderByDirection
 }
 
-input webuserUpdateInput {
+input WebuserUpdateInput {
   auth: String
-  cookie_id: String
+  cookieId: String
   encodedVap: [BigInt]
   p256dh: String
 }
 
-type webuserUpdateResponse {
+type WebuserUpdateResponse {
   """Count of the records impacted by the mutation"""
   affectedCount: Int!
 
   """Array of records impacted by the mutation"""
-  records: [webuser!]!
+  records: [Webuser!]!
 }
