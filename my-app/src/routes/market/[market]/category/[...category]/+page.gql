@@ -1,0 +1,24 @@
+query MarketCategory($market: String!, $category: String!) {
+	marketCollection(filter: { id: {eq: $market}}) {
+		edges {
+			node {
+        categoryCollection(filter: {slug: { eq: $category }}) {
+          edges {
+            node {
+              name,
+              productCollection {
+                edges {
+                  node {
+                    name,
+                    ...ProductInfo
+                  }
+                },
+                totalCount
+              }
+            }
+          }
+        }
+			}
+		}
+	}
+}
